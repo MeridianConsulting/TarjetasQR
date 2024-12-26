@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-const EmpleadoForm = () => {
+const Form = () => {
   const [formData, setFormData] = useState({
-    Id: '',
     nombre: '',
     cargo: '',
     numero_telefonico: '',
@@ -24,7 +23,7 @@ const EmpleadoForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/empleados', {
+      const response = await fetch('http://localhost:3001/api/empleados', { // Apunta al puerto correcto
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +34,6 @@ const EmpleadoForm = () => {
       if (response.ok) {
         alert('Empleado agregado exitosamente');
         setFormData({
-          Id: '',
           nombre: '',
           cargo: '',
           numero_telefonico: '',
@@ -55,10 +53,6 @@ const EmpleadoForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Id:</label>
-        <input type="number" name="Id" value={formData.Id} onChange={handleChange} required />
-      </div>
       <div>
         <label>Nombre:</label>
         <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} />
@@ -92,4 +86,4 @@ const EmpleadoForm = () => {
   );
 };
 
-export default EmpleadoForm;
+export default Form;
