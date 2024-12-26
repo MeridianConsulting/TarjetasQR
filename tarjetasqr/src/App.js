@@ -9,8 +9,8 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<ProfilePage />} />
-          <Route path="/form" element={<Form />} /> {/* Nueva ruta para el formulario */}
+          <Route path="/" element={<Form />} />
+          <Route path="/ProfilePage" element={<ProfilePage />} /> {/* Nueva ruta para el formulario */}
         </Routes>
       </div>
     </Router>
