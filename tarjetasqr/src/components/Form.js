@@ -23,7 +23,7 @@ const Form = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/api/empleados', { // Apunta al puerto correcto
+      const response = await fetch('http://localhost:3001/api/empleados', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
