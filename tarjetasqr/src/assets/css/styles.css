@@ -1,0 +1,126 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: white; /* Fondo blanco */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  /* Card Container */
+  .card-container {
+    background-color: #f7f6ef; /* Rosadito */
+    border-radius: 10px;
+    width: 350px;
+    border: 3px solid #F4D35E; /* Borde amarillo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    color: #04080F; /* Letra negra */
+  }
+  
+  /* Header Section */
+  .header {
+    background-color: #33619D; /* Azul oscuro */
+    padding: 20px;
+    text-align: center;
+    color: #FCF7FF; /* Blanco lavanda */
+  }
+  
+  .header img {
+    border-radius: 50%;
+    width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+    border: 3px solid #F4D35E; /* Borde amarillo brillante */
+  }
+  
+  .header h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+  
+  .header p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  /* Content Section */
+  .content {
+    padding: 20px;
+  }
+  
+  /* Contact Information */
+  .contact-info p {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #04080F; /* Negro */
+  }
+  
+  .contact-info span {
+    margin-left: 10px;
+  }
+  
+  .contact-info a {
+    text-decoration: none;
+    color: #33619D; /* Azul oscuro */
+  }
+  
+  .contact-info a:hover {
+    color: #FFA352; /* Naranja pastel */
+  }
+  
+  /* Social Media Section */
+  .social-media {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .social-media h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #04080F; /* Negro */
+  }
+  
+  .social-media-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .social-media-icons a {
+    font-size: 24px;
+    text-decoration: none;
+    color: #33619D; /* Azul oscuro */
+    transition: color 0.3s ease;
+  }
+  
+  .social-media-icons a:hover {
+    color: #FFA352; /* Naranja pastel */
+  }
+  
+  /* Button */
+  .download-btn {
+    text-align: center;
+  }
+  
+  .download-btn button {
+    background-color: #F4D35E; /* Amarillo brillante */
+    color: #04080F; /* Negro */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .download-btn button:hover {
+    background-color: #FFA352; /* Naranja pastel */
+  }
+  
