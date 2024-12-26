@@ -113,7 +113,7 @@ form button:hover {
 }
 /* Estilos personalizados para la barra de desplazamiento */
 ::-webkit-scrollbar {
-    width: 12px; /* Ancho de la barra de desplazamiento */
+    width: 10px; /* Ancho de la barra de desplazamiento */
 }
 
 ::-webkit-scrollbar-track {
