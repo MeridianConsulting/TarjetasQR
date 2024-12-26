@@ -108,3 +108,22 @@ form button:hover {
         padding: 8px 16px; /* Reducir padding */
     }
 }
+/* Estilos personalizados para la barra de desplazamiento */
+::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color de fondo del track */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Color de la barra */
+    border-radius: 10px; /* Bordes redondeados */
+    border: 3px solid #f1f1f1; /* Borde alrededor de la barra */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color al pasar el mouse */
+}
