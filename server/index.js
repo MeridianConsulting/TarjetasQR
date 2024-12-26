@@ -1,12 +1,16 @@
 const express = require("express");
 const cors = require('cors');
 const db = require('./config/db');
+const userRoutes = require('./routes/users');
 
 const app = express();
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// Rutas
+app.use('/api', userRoutes);
 
 // Puerto en el que escucha el servidor
 app.listen(3001, () => {
