@@ -1,4 +1,7 @@
 /* General Styles */
+/* Estilo para los mensajes de error */
+form .contact-item .error { color: red !important; /* Asegurar que el color rojo se aplique */ font-size: 14px !important; /* Asegurar el tamaño de la fuente */ margin-top: 5px !important; /* Asegurar el margen */ }
+
 body {
     font-family: Arial, sans-serif;
     background-color: white; /* Fondo blanco */
