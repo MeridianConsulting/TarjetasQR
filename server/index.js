@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require('cors');
 const db = require('./config/db');
 const userRoutes = require('./routes/users');
+const adminRoutes = require('./routes/admin'); // Ruta para las operaciones del administrador
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/api', userRoutes);
+app.use('/api/admin', adminRoutes); // Agregar rutas para administrador
 
 // Puerto en el que escucha el servidor
 app.listen(3001, () => {

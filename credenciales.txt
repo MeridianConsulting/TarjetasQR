@@ -1,0 +1,1 @@
+VALUES ('adminUser', SHA2('adminPassword123', 256));
