@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-12-2024 a las 21:55:04
+-- Tiempo de generación: 27-12-2024 a las 23:06:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'adminUser', '9b0cb48f41e0921f1388b57182bd8ab72a0e520cc08bab1d84c2673d7f2ec402', '2024-12-27 19:06:08', '2024-12-27 19:06:08');
+(1, 'admin', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36F6g77lFYmX89hUB7rWN4y', '2024-12-27 21:13:33', '2024-12-27 21:13:33');
 
 -- --------------------------------------------------------
 
@@ -64,7 +64,6 @@ CREATE TABLE `empleados` (
 --
 
 INSERT INTO `empleados` (`Id`, `nombre`, `cargo`, `numero_telefonico`, `email`, `compania`, `telefono_empresa`, `telefono_internacional`) VALUES
-(14, 'fernanfloo', 'gerente', '3201321231', 'meridian@gmail.com', 'meridian', 2147483647, 2147483647),
 (15, 'lasdhaskl', 'asdasdas', '23123123', 'sdasdasdq@gmail.com', '12312312', 23123, 123123123),
 (16, 'Mateo', 'desarrollador', '321031212', 'mateo@gmail.com', 'meridian', 213123, 312312),
 (17, 'Edwin', 'barredor', '32031231', 'edwin@gmail.com', 'venezuela', 231312, 3213123);
@@ -94,7 +93,7 @@ ALTER TABLE `empleados`
 -- AUTO_INCREMENT de la tabla `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `empleados`
