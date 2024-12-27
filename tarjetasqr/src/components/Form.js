@@ -89,7 +89,7 @@ const Form = () => {
           telefono_internacional: ''
         });
         setErrors({});
-        setTimeout(() => navigate(`/empleados/${newEmployee.id}`), 1500); // Navega tras 1.5s
+        setTimeout(() => navigate(`/ProfilePage/${newEmployee.id}`), 1500); // Redirige a ProfilePage con el ID
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.error || 'Error al agregar empleado');

@@ -27,25 +27,18 @@ const agregarEmpleado = (req, res) => {
 const obtenerEmpleadoPorId = (req, res) => {
     const { id } = req.params;
 
-    const sql = 'SELECT * FROM empleados WHERE Id = ?';
-
-    db.query(sql, [id], (err, result) => {
+    const sql = 'SELECT * FROM empleados WHERE id = ?';
+    db.query(sql, [id], (err, results) => {
         if (err) {
-            console.error("Error al obtener empleado:", err); // Imprime el error en la consola
-            return res.status(500).json({ 
-                error: "Error al obtener empleado", 
-                detalle: err.message 
-            });
+            console.error('Error al obtener empleado:', err);
+            return res.status(500).json({ error: 'Error al obtener empleado' });
         }
 
-        if (result.length === 0) {
-            return res.status(404).json({ 
-                message: 'Empleado no encontrado' 
-            });
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Empleado no encontrado' });
         }
 
-        // Responder con los datos del empleado en formato JSON
-        res.status(200).json(result[0]);
+        res.status(200).json(results[0]); // Devuelve el primer resultado
     });
 };
 

@@ -11,6 +11,7 @@ const ContactInfo = ({ userId }) => {
   useEffect(() => {
     const fetchContactData = async () => {
       try {
+        // Asegúrate de que la ruta esté correcta con el ID
         const response = await fetch(`http://localhost:3001/api/empleados/${userId}`);
         if (!response.ok) {
           throw new Error('Error al obtener los datos del empleado');

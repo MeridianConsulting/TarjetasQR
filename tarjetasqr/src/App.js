@@ -9,8 +9,10 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          {/* Ruta raíz para el formulario */}
           <Route path="/" element={<Form />} />
-          <Route path="/ProfilePage" element={<ProfilePage />} /> {/* Nueva ruta para el formulario */}
+          {/* Ruta dinámica para el perfil, incluye el parámetro :id */}
+          <Route path="/ProfilePage/:id" element={<ProfilePage />} />
         </Routes>
       </div>
     </Router>
