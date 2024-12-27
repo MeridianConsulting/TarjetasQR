@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Cambiado de useHistory a useNavigate
+import { ClipLoader } from 'react-spinners'; // Importando el spinner
 import '../assets/css/form.css'; 
 
 const Form = () => {
@@ -16,6 +17,7 @@ const Form = () => {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false); // Estado para controlar el estado de carga
   const navigate = useNavigate(); // Cambiado de useHistory a useNavigate
 
   // Validaciones del formulario
@@ -66,6 +68,8 @@ const Form = () => {
       return;
     }
 
+    setLoading(true); // Inicia la carga
+
     try {
       const response = await fetch('http://localhost:3001/api/empleados', {
         method: 'POST',
@@ -99,6 +103,8 @@ const Form = () => {
       console.error('Error:', error);
       setErrorMessage('Ocurrió un error al conectar con el servidor');
       setSuccessMessage('');
+    } finally {
+      setLoading(false); // Termina la carga
     }
   };
 
@@ -112,46 +118,53 @@ const Form = () => {
       <div className="content">
         {successMessage && <p className="success-message">{successMessage}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="contact-item">
-            <label>Nombre:</label>
-            <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} />
-            {errors.nombre && <p className="error">{errors.nombre}</p>}
+        
+        {loading ? ( // Mostrar el spinner mientras carga
+          <div className="loading-spinner">
+            <ClipLoader color="#36d7b7" size={50} />
           </div>
-          <div className="contact-item">
-            <label>Cargo:</label>
-            <input type="text" name="cargo" value={formData.cargo} onChange={handleChange} />
-            {errors.cargo && <p className="error">{errors.cargo}</p>}
-          </div>
-          <div className="contact-item">
-            <label>Número Telefónico:</label>
-            <input type="text" name="numero_telefonico" value={formData.numero_telefonico} onChange={handleChange} />
-            {errors.numero_telefonico && <p className="error">{errors.numero_telefonico}</p>}
-          </div>
-          <div className="contact-item">
-            <label>Email:</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} />
-            {errors.email && <p className="error">{errors.email}</p>}
-          </div>
-          <div className="contact-item">
-            <label>Compañia:</label>
-            <input type="text" name="compania" value={formData.compania} onChange={handleChange} />
-            {errors.compania && <p className="error">{errors.compania}</p>}
-          </div>
-          <div className="contact-item">
-            <label>Teléfono Empresa:</label>
-            <input type="text" name="telefono_empresa" value={formData.telefono_empresa} onChange={handleChange} />
-            {errors.telefono_empresa && <p className="error">{errors.telefono_empresa}</p>}
-          </div>
-          <div className="contact-item">
-            <label>Teléfono Internacional:</label>
-            <input type="text" name="telefono_internacional" value={formData.telefono_internacional} onChange={handleChange} />
-            {errors.telefono_internacional && <p className="error">{errors.telefono_internacional}</p>}
-          </div>
-          <div className="download-btn">
-            <button type="submit">Guardar</button>
-          </div>
-        </form>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className="contact-item">
+              <label>Nombre:</label>
+              <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} />
+              {errors.nombre && <p className="error">{errors.nombre}</p>}
+            </div>
+            <div className="contact-item">
+              <label>Cargo:</label>
+              <input type="text" name="cargo" value={formData.cargo} onChange={handleChange} />
+              {errors.cargo && <p className="error">{errors.cargo}</p>}
+            </div>
+            <div className="contact-item">
+              <label>Número Telefónico:</label>
+              <input type="text" name="numero_telefonico" value={formData.numero_telefonico} onChange={handleChange} />
+              {errors.numero_telefonico && <p className="error">{errors.numero_telefonico}</p>}
+            </div>
+            <div className="contact-item">
+              <label>Email:</label>
+              <input type="email" name="email" value={formData.email} onChange={handleChange} />
+              {errors.email && <p className="error">{errors.email}</p>}
+            </div>
+            <div className="contact-item">
+              <label>Compañia:</label>
+              <input type="text" name="compania" value={formData.compania} onChange={handleChange} />
+              {errors.compania && <p className="error">{errors.compania}</p>}
+            </div>
+            <div className="contact-item">
+              <label>Teléfono Empresa:</label>
+              <input type="text" name="telefono_empresa" value={formData.telefono_empresa} onChange={handleChange} />
+              {errors.telefono_empresa && <p className="error">{errors.telefono_empresa}</p>}
+            </div>
+            <div className="contact-item">
+              <label>Teléfono Internacional:</label>
+              <input type="text" name="telefono_internacional" value={formData.telefono_internacional} onChange={handleChange} />
+              {errors.telefono_internacional && <p className="error">{errors.telefono_internacional}</p>}
+            </div>
+            <div className="download-btn">
+              <button type="submit">Guardar</button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );
