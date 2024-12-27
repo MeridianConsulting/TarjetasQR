@@ -11,16 +11,21 @@ const ContactInfo = ({ userId }) => {
   useEffect(() => {
     const fetchContactData = async () => {
       try {
-        // Asegúrate de que la ruta esté correcta con el ID
         const response = await fetch(`http://localhost:3001/api/empleados/${userId}`);
         if (!response.ok) {
           throw new Error('Error al obtener los datos del empleado');
         }
         const data = await response.json();
-        setContactData({
-          email: data.email,
-          numero_telefonico: data.numero_telefonico,
-        });
+        
+        // Asegúrate de que los datos existen en la respuesta
+        if (data.email && data.numero_telefonico) {
+          setContactData({
+            email: data.email,
+            numero_telefonico: data.numero_telefonico,
+          });
+        } else {
+          throw new Error('Datos incompletos del empleado');
+        }
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -43,6 +48,14 @@ const ContactInfo = ({ userId }) => {
       <div className="contact-item">
         <p>📧 <span>{contactData.email}</span></p>
         <small>Email</small>
+      </div>
+      <div className="contact-item">
+        <p>🏢 <span>Meridian Consulting LTA</span></p>
+        <small>Company</small>
+      </div>
+      <div className="contact-item">
+        <p>🌐 <span><a href="https://meridianltda.com/" target="_blank" rel="noopener noreferrer">meridianltda.com</a></span></p>
+        <small>Website</small>
       </div>
     </div>
   );

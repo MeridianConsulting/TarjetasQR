@@ -11,7 +11,7 @@ const ProfilePage = () => {
 
   return (
     <div className="card-container">
-      <Header />
+       <Header userId={id} />
       <div className="content">
         {/* Pasar el userId al componente ContactInfo */}
         <ContactInfo userId={id} />
