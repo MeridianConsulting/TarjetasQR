@@ -69,17 +69,16 @@ exports.getEmployeeById = (req, res) => {
     });
 };
 
-// Controlador para crear un nuevo empleado
 exports.createEmployee = (req, res) => {
-    const { nombre, puesto, salario } = req.body;
+    const { nombre, cargo, numero_telefonico, email, compania, telefono_empresa, telefono_internacional } = req.body;
 
-    if (!nombre || !puesto || !salario) {
-        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    if (!nombre || !cargo || !email) {
+        return res.status(400).json({ message: "Nombre, cargo y email son obligatorios" });
     }
 
-    const query = "INSERT INTO empleados (nombre, puesto, salario) VALUES (?, ?, ?)";
+    const query = "INSERT INTO empleados (nombre, cargo, numero_telefonico, email, compania, telefono_empresa, telefono_internacional) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    db.query(query, [nombre, puesto, salario], (err, results) => {
+    db.query(query, [nombre, cargo, numero_telefonico, email, compania, telefono_empresa, telefono_internacional], (err, results) => {
         if (err) {
             console.error("Error al crear el empleado:", err.message);
             return res.status(500).json({ message: "Error al crear el empleado" });
@@ -89,30 +88,88 @@ exports.createEmployee = (req, res) => {
     });
 };
 
+
+// Controlador para actualizar un empleado
 // Controlador para actualizar un empleado
 exports.updateEmployee = (req, res) => {
-    const { id } = req.params;
-    const { nombre, puesto, salario } = req.body;
+    const { id } = req.params; // ID del empleado desde los parámetros de la URL
+    const {
+        nombre,
+        cargo,
+        numero_telefonico,
+        email,
+        compania,
+        telefono_empresa,
+        telefono_internacional,
+    } = req.body; // Datos a actualizar desde el cuerpo de la solicitud
 
-    if (!nombre || !puesto || !salario) {
-        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    // Validar que el ID sea un número entero positivo
+    if (!id || isNaN(id) || id <= 0) {
+        return res.status(400).json({ message: "ID de empleado inválido" });
     }
 
-    const query = "UPDATE empleados SET nombre = ?, puesto = ?, salario = ? WHERE id = ?";
+    // Validar que los campos requeridos estén presentes
+    if (!nombre || !cargo || !numero_telefonico || !email || !compania) {
+        return res.status(400).json({
+            message: "Todos los campos obligatorios deben estar presentes: nombre, cargo, numero_telefonico, email, y compania",
+        });
+    }
 
-    db.query(query, [nombre, puesto, salario, id], (err, results) => {
-        if (err) {
-            console.error("Error al actualizar el empleado:", err.message);
-            return res.status(500).json({ message: "Error al actualizar el empleado" });
+    // Validar que los campos numéricos sean válidos (opcional si no son obligatorios)
+    if (
+        (telefono_empresa && (isNaN(telefono_empresa) || telefono_empresa <= 0)) ||
+        (telefono_internacional && (isNaN(telefono_internacional) || telefono_internacional <= 0))
+    ) {
+        return res
+            .status(400)
+            .json({ message: "Los campos de teléfono deben ser números positivos" });
+    }
+
+    const query = `
+        UPDATE empleados 
+        SET 
+            nombre = ?, 
+            cargo = ?, 
+            numero_telefonico = ?, 
+            email = ?, 
+            compania = ?, 
+            telefono_empresa = ?, 
+            telefono_internacional = ? 
+        WHERE Id = ?
+    `;
+
+    // Ejecutar la consulta de actualización en la base de datos
+    db.query(
+        query,
+        [
+            nombre,
+            cargo,
+            numero_telefonico,
+            email,
+            compania,
+            telefono_empresa || null, // Si no está presente, asignar null
+            telefono_internacional || null, // Si no está presente, asignar null
+            id,
+        ],
+        (err, results) => {
+            if (err) {
+                console.error("Error al actualizar el empleado:", err.message);
+                return res.status(500).json({ message: "Error al actualizar el empleado" });
+            }
+
+            // Verificar si algún registro fue actualizado
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: "Empleado no encontrado" });
+            }
+
+            // Responder con un mensaje de éxito si se actualizó el empleado
+            return res
+                .status(200)
+                .json({ message: "Empleado actualizado con éxito", id });
         }
-
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ message: "Empleado no encontrado" });
-        }
-
-        return res.status(200).json({ message: "Empleado actualizado con éxito" });
-    });
+    );
 };
+
 
 // Controlador para eliminar un empleado
 exports.deleteEmployee = (req, res) => {

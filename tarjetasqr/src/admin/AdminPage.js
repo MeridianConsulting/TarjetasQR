@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import '../assets/css/admin.css';
 
 const AdminPage = ({ onLogout }) => {
   const [empleados, setEmpleados] = useState([]);
+  const [editEmpleado, setEditEmpleado] = useState(null); // Estado para el empleado en edición
+
   const [newEmpleado, setNewEmpleado] = useState({
     nombre: '',
     cargo: '',
@@ -15,7 +18,7 @@ const AdminPage = ({ onLogout }) => {
   useEffect(() => {
     const fetchEmpleados = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/admin/employees'); // Ruta ajustada
+        const response = await fetch('http://localhost:3001/api/admin/employees');
         if (!response.ok) {
           throw new Error('Error al obtener empleados');
         }
@@ -33,10 +36,15 @@ const AdminPage = ({ onLogout }) => {
     setNewEmpleado({ ...newEmpleado, [name]: value });
   };
 
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditEmpleado({ ...editEmpleado, [name]: value });
+  };
+
   const handleCreateEmpleado = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/api/admin/employees', { // Ruta ajustada
+      const response = await fetch('http://localhost:3001/api/admin/employees', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -64,22 +72,53 @@ const AdminPage = ({ onLogout }) => {
 
   const handleDeleteEmpleado = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/admin/employees/${id}`, { // Ruta ajustada
+      const response = await fetch(`http://localhost:3001/api/admin/employees/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
         throw new Error('Error al eliminar empleado');
       }
-      setEmpleados(empleados.filter(empleado => empleado.Id !== id));
+      setEmpleados(empleados.filter((empleado) => empleado.Id !== id));
     } catch (error) {
       console.error('Error al eliminar empleado:', error);
     }
   };
 
+  const handleEditEmpleado = (empleado) => {
+    setEditEmpleado(empleado); // Cargar los datos del empleado en edición
+  };
+
+  const handleUpdateEmpleado = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/admin/employees/${editEmpleado.Id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editEmpleado)
+      });
+      if (!response.ok) {
+        throw new Error('Error al actualizar empleado');
+      }
+      setEmpleados(
+        empleados.map((empleado) =>
+          empleado.Id === editEmpleado.Id ? editEmpleado : empleado
+        )
+      );
+      setEditEmpleado(null); // Cerrar el modal
+    } catch (error) {
+      console.error('Error al actualizar empleado:', error);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditEmpleado(null); // Cerrar el modal sin guardar cambios
+  };
+
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <table>
+    <div className="admin-page">
+      <h1 className="admin-page__title">Admin Dashboard</h1>
+      <table className="admin-page__table">
         <thead>
           <tr>
             <th>ID</th>
@@ -94,7 +133,7 @@ const AdminPage = ({ onLogout }) => {
           </tr>
         </thead>
         <tbody>
-          {empleados.map(empleado => (
+          {empleados.map((empleado) => (
             <tr key={empleado.Id}>
               <td>{empleado.Id}</td>
               <td>{empleado.nombre}</td>
@@ -105,16 +144,106 @@ const AdminPage = ({ onLogout }) => {
               <td>{empleado.telefono_empresa}</td>
               <td>{empleado.telefono_internacional}</td>
               <td>
-                <button onClick={() => handleDeleteEmpleado(empleado.Id)}>Eliminar</button>
+                <button
+                  className="admin-page__button admin-page__button--edit"
+                  onClick={() => handleEditEmpleado(empleado)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="admin-page__button admin-page__button--delete"
+                  onClick={() => handleDeleteEmpleado(empleado.Id)}
+                >
+                  Eliminar
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <h2>Añadir Nuevo Empleado</h2>
-      <form onSubmit={handleCreateEmpleado}>
+      {editEmpleado && (
+        <div className="admin-page__modal">
+          <h2>Editar Empleado</h2>
+          <form className="admin-page__form">
+            <input
+              className="admin-page__input"
+              type="text"
+              name="nombre"
+              placeholder="Nombre"
+              value={editEmpleado.nombre}
+              onChange={handleEditInputChange}
+            />
+            <input
+              className="admin-page__input"
+              type="text"
+              name="cargo"
+              placeholder="Cargo"
+              value={editEmpleado.cargo}
+              onChange={handleEditInputChange}
+            />
+            <input
+              className="admin-page__input"
+              type="text"
+              name="numero_telefonico"
+              placeholder="Número Telefónico"
+              value={editEmpleado.numero_telefonico}
+              onChange={handleEditInputChange}
+            />
+            <input
+              className="admin-page__input"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={editEmpleado.email}
+              onChange={handleEditInputChange}
+            />
+            <input
+              className="admin-page__input"
+              type="text"
+              name="compania"
+              placeholder="Compañía"
+              value={editEmpleado.compania}
+              onChange={handleEditInputChange}
+            />
+            <input
+              className="admin-page__input"
+              type="text"
+              name="telefono_empresa"
+              placeholder="Teléfono Empresa"
+              value={editEmpleado.telefono_empresa}
+              onChange={handleEditInputChange}
+            />
+            <input
+              className="admin-page__input"
+              type="text"
+              name="telefono_internacional"
+              placeholder="Teléfono Internacional"
+              value={editEmpleado.telefono_internacional}
+              onChange={handleEditInputChange}
+            />
+            <button
+              className="admin-page__button admin-page__button--submit"
+              type="button"
+              onClick={handleUpdateEmpleado}
+            >
+              Guardar Cambios
+            </button>
+            <button
+              className="admin-page__button admin-page__button--cancel"
+              type="button"
+              onClick={handleCancelEdit}
+            >
+              Cancelar
+            </button>
+          </form>
+        </div>
+      )}
+
+      <h2 className="admin-page__subtitle">Añadir Nuevo Empleado</h2>
+      <form className="admin-page__form" onSubmit={handleCreateEmpleado}>
         <input
+          className="admin-page__input"
           type="text"
           name="nombre"
           placeholder="Nombre"
@@ -123,6 +252,7 @@ const AdminPage = ({ onLogout }) => {
           required
         />
         <input
+          className="admin-page__input"
           type="text"
           name="cargo"
           placeholder="Cargo"
@@ -131,6 +261,7 @@ const AdminPage = ({ onLogout }) => {
           required
         />
         <input
+          className="admin-page__input"
           type="text"
           name="numero_telefonico"
           placeholder="Número Telefónico"
@@ -139,6 +270,7 @@ const AdminPage = ({ onLogout }) => {
           required
         />
         <input
+          className="admin-page__input"
           type="email"
           name="email"
           placeholder="Email"
@@ -147,6 +279,7 @@ const AdminPage = ({ onLogout }) => {
           required
         />
         <input
+          className="admin-page__input"
           type="text"
           name="compania"
           placeholder="Compañía"
@@ -154,6 +287,7 @@ const AdminPage = ({ onLogout }) => {
           onChange={handleInputChange}
         />
         <input
+          className="admin-page__input"
           type="text"
           name="telefono_empresa"
           placeholder="Teléfono Empresa"
@@ -161,16 +295,21 @@ const AdminPage = ({ onLogout }) => {
           onChange={handleInputChange}
         />
         <input
+          className="admin-page__input"
           type="text"
           name="telefono_internacional"
           placeholder="Teléfono Internacional"
           value={newEmpleado.telefono_internacional}
           onChange={handleInputChange}
         />
-        <button type="submit">Añadir Empleado</button>
+        <button className="admin-page__button admin-page__button--submit" type="submit">
+          Crear
+        </button>
       </form>
 
-      <button onClick={onLogout}>Logout</button>
+      <button className="admin-page__button admin-page__button--logout" onClick={onLogout}>
+        Cerrar sesión
+      </button>
     </div>
   );
 };
