@@ -8,7 +8,7 @@ Este proyecto permite identificar de manera fácil y rápida a los empleados de 
 - **React**: Framework para la creación de la aplicación web.
 - **MySQL**: Motor de base de datos para almacenar la información de los empleados y generar los QR.
 - **Express**: Framework para Node.js utilizado en la construcción del servidor y API.
-- **CORS**: Cliente HTTP para hacer peticiones al backend desde la aplicación móvil.
+- **CORS**: Cliente HTTP para hacer peticiones al backend desde la aplicación web.
 
 ## Descripción
 
