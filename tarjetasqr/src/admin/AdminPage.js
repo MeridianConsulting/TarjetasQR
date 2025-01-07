@@ -4,7 +4,6 @@ import '../assets/css/admin.css';
 const AdminPage = ({ onLogout }) => {
   const [empleados, setEmpleados] = useState([]);
   const [editEmpleado, setEditEmpleado] = useState(null); // Estado para el empleado en edición
-
   const [newEmpleado, setNewEmpleado] = useState({
     nombre: '',
     cargo: '',
@@ -15,10 +14,13 @@ const AdminPage = ({ onLogout }) => {
     telefono_internacional: ''
   });
 
+  // Base URL desde las variables de entorno
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchEmpleados = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/admin/employees');
+        const response = await fetch(`${API_BASE_URL}/api/admin/employees`);
         if (!response.ok) {
           throw new Error('Error al obtener empleados');
         }
@@ -29,7 +31,7 @@ const AdminPage = ({ onLogout }) => {
       }
     };
     fetchEmpleados();
-  }, []);
+  }, [API_BASE_URL]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +46,7 @@ const AdminPage = ({ onLogout }) => {
   const handleCreateEmpleado = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/api/admin/employees', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/employees`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -72,7 +74,7 @@ const AdminPage = ({ onLogout }) => {
 
   const handleDeleteEmpleado = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/admin/employees/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/employees/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
@@ -90,7 +92,7 @@ const AdminPage = ({ onLogout }) => {
 
   const handleUpdateEmpleado = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/admin/employees/${editEmpleado.Id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/employees/${editEmpleado.Id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -114,6 +116,7 @@ const AdminPage = ({ onLogout }) => {
   const handleCancelEdit = () => {
     setEditEmpleado(null); // Cerrar el modal sin guardar cambios
   };
+
 
   return (
     <div className="admin-page">

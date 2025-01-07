@@ -7,12 +7,13 @@ const Header = ({ userId }) => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Obtener los datos del empleado (nombre y cargo)
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/empleados/${userId}`);
+        const response = await fetch(`${API_BASE_URL}/api/empleados/${userId}`);
         if (!response.ok) {
           throw new Error("Error al obtener los datos del empleado");
         }

@@ -19,6 +19,8 @@ const Form = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false); // Estado para controlar el estado de carga
   const navigate = useNavigate(); // Cambiado de useHistory a useNavigate
+    // Base URL desde las variables de entorno
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   // Validaciones del formulario
   const validate = () => {
@@ -71,7 +73,7 @@ const Form = () => {
     setLoading(true); // Inicia la carga
 
     try {
-      const response = await fetch('http://localhost:3001/api/empleados', {
+      const response = await fetch(`${API_BASE_URL}/api/empleados`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

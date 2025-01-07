@@ -16,6 +16,7 @@
     "react-spinners": "^0.15.0",
     "web-vitals": "^4.2.4"
   },
+  "homepage": "https://tarjetaqr.transporteszircon.com/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

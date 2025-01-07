@@ -5,11 +5,11 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const handleLogin = async () => {
     if (username && password) {
       try {
-        const response = await fetch('http://localhost:3001/api/admin/login', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
