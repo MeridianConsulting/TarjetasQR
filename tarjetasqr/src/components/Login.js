@@ -4,35 +4,40 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    if (username && password) {
-      try {
-        // Cambia la URL al endpoint PHP para login
-        const response = await fetch('http://localhost/server/api/admin/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          alert(data.message || 'Login successful');
-          onLogin(); // Marca al usuario como autenticado
-          navigate('/admin'); // Redirige a la página de administración
-        } else {
-          alert(data.message || 'Login failed');
-        }
-      } catch (error) {
-        console.error('Error during login:', error);
-        alert('An error occurred. Please try again.');
+    setError(''); // Limpiar errores previos
+    try {
+      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/login', { // Cambié la URL aquí
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+  
+      if (!response.ok) {
+        // Verificar si el servidor devuelve un error HTTP
+        const errorText = await response.text();
+        throw new Error(`Error del servidor: ${errorText}`);
       }
-    } else {
-      alert('Please fill out both fields.');
+  
+      const data = await response.json(); // Intentar analizar la respuesta como JSON
+  
+      if (data.success) {
+        onLogin(); // Callback si el login es exitoso
+        navigate('/admin');
+      } else {
+        setError(data.message || 'Credenciales inválidas.');
+      }
+    } catch (err) {
+      console.error('Error al iniciar sesión:', err);
+      setError('No se pudo conectar con el servidor o la respuesta no es válida.');
     }
   };
+  
 
   return (
     <div className="login-container">
@@ -59,6 +64,7 @@ const Login = ({ onLogin }) => {
         <button type="button" onClick={handleLogin}>
           Login
         </button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </div>
   );

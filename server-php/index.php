@@ -6,6 +6,8 @@ require_once __DIR__ . '/middleware/cors.php';
 header("Content-Type: application/json");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+error_log("Method: $method, Path: $path");
+
 
 // Captura el método y la ruta de la solicitud
 $method = $_SERVER['REQUEST_METHOD'];
@@ -30,7 +32,6 @@ function handleRequest($method, $path) {
 
     // Rutas para empleados
     elseif ($path === "employees" && $method === "POST") {
-        error_log("POST Request to /employees");
         $data = json_decode(file_get_contents("php://input"), true);
         $controller = new UserController();
         $controller->agregarEmpleado($data);
@@ -38,6 +39,8 @@ function handleRequest($method, $path) {
         $id = $matches[1];
         $controller = new UserController();
         $controller->obtenerEmpleadoPorId($id);
+    //Rutas para Administradores
+
     } elseif ($path === "employees/statistics" && $method === "GET") {
         $controller = new AdminController();
         $controller->getEmployeeStatistics();
@@ -61,8 +64,11 @@ function handleRequest($method, $path) {
     elseif ($path === "admin/login" && $method === "POST") {
         $data = json_decode(file_get_contents("php://input"), true);
         $controller = new AdminController();
-        $controller->loginAdmin($data);
+        $controller->validateLogin($data);
     }
+    
+        
+    
 
     // Si no se encuentra la ruta
     else {
