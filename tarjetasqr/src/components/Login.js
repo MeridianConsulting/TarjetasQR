@@ -9,7 +9,8 @@ const Login = ({ onLogin }) => {
   const handleLogin = async () => {
     if (username && password) {
       try {
-        const response = await fetch('http://localhost:3001/api/admin/login', {
+        // Cambia la URL al endpoint PHP para login
+        const response = await fetch('http://localhost/server/api/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
@@ -18,6 +19,7 @@ const Login = ({ onLogin }) => {
         const data = await response.json();
 
         if (response.ok) {
+          alert(data.message || 'Login successful');
           onLogin(); // Marca al usuario como autenticado
           navigate('/admin'); // Redirige a la página de administración
         } else {

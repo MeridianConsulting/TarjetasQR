@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Cambiado de useHistory a useNavigate
-import { ClipLoader } from 'react-spinners'; // Importando el spinner
-import '../assets/css/form.css'; 
+import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
+import '../assets/css/form.css';
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -15,12 +15,9 @@ const Form = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false); // Estado para controlar el estado de carga
-  const navigate = useNavigate(); // Cambiado de useHistory a useNavigate
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Validaciones del formulario
   const validate = () => {
     let errors = {};
     if (!formData.nombre.trim()) errors.nombre = "El nombre es requerido";
@@ -28,7 +25,7 @@ const Form = () => {
     if (!formData.numero_telefonico.trim()) {
       errors.numero_telefonico = "El número telefónico es requerido";
     } else if (!/^\d+$/.test(formData.numero_telefonico)) {
-      errors.numero_telefonico = "El número telefónico debe contener solo números";
+      errors.numero_telefonico = "Debe contener solo números";
     }
     if (!formData.email.trim()) {
       errors.email = "El email es requerido";
@@ -39,17 +36,16 @@ const Form = () => {
     if (!formData.telefono_empresa.trim()) {
       errors.telefono_empresa = "El teléfono de la empresa es requerido";
     } else if (!/^\d+$/.test(formData.telefono_empresa)) {
-      errors.telefono_empresa = "El teléfono de la empresa debe contener solo números";
+      errors.telefono_empresa = "Debe contener solo números";
     }
     if (!formData.telefono_internacional.trim()) {
       errors.telefono_internacional = "El teléfono internacional es requerido";
     } else if (!/^\d+$/.test(formData.telefono_internacional)) {
-      errors.telefono_internacional = "El teléfono internacional debe contener solo números";
+      errors.telefono_internacional = "Debe contener solo números";
     }
     return errors;
   };
 
-  // Manejo del cambio de inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -58,7 +54,6 @@ const Form = () => {
     });
   };
 
-  // Manejo del envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -68,43 +63,34 @@ const Form = () => {
       return;
     }
 
-    setLoading(true); // Inicia la carga
+    setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/empleados', {
+      const response = await fetch('http://localhost/tarjetasqr/server-php/employees', {
         method: 'POST',
+        body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        const newEmployee = await response.json();
-        setSuccessMessage('Empleado agregado exitosamente');
-        setErrorMessage('');
-        setFormData({
-          nombre: '',
-          cargo: '',
-          numero_telefonico: '',
-          email: '',
-          compania: '',
-          telefono_empresa: '',
-          telefono_internacional: ''
-        });
-        setErrors({});
-        setTimeout(() => navigate(`/ProfilePage/${newEmployee.id}`), 1500); // Redirige a ProfilePage con el ID
+      if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Redirige inmediatamente al ID del usuario recién creado
+        navigate(`/ProfilePage/${result.id}`);
       } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.error || 'Error al agregar empleado');
-        setSuccessMessage('');
+        setErrors({ general: result.error || 'Error al agregar empleado' });
       }
     } catch (error) {
       console.error('Error:', error);
-      setErrorMessage('Ocurrió un error al conectar con el servidor');
-      setSuccessMessage('');
+      setErrors({ general: 'Ocurrió un error al conectar con el servidor' });
     } finally {
-      setLoading(false); // Termina la carga
+      setLoading(false);
     }
   };
 
@@ -116,10 +102,9 @@ const Form = () => {
         <p>Completa los campos para agregar un nuevo empleado</p>
       </header>
       <div className="content">
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        
-        {loading ? ( // Mostrar el spinner mientras carga
+        {errors.general && <p className="error-message">{errors.general}</p>}
+
+        {loading ? (
           <div className="loading-spinner">
             <ClipLoader color="#36d7b7" size={50} />
           </div>
@@ -127,37 +112,72 @@ const Form = () => {
           <form onSubmit={handleSubmit}>
             <div className="contact-item">
               <label>Nombre:</label>
-              <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} />
+              <input 
+                type="text" 
+                name="nombre" 
+                value={formData.nombre} 
+                onChange={handleChange} 
+              />
               {errors.nombre && <p className="error">{errors.nombre}</p>}
             </div>
             <div className="contact-item">
               <label>Cargo:</label>
-              <input type="text" name="cargo" value={formData.cargo} onChange={handleChange} />
+              <input 
+                type="text" 
+                name="cargo" 
+                value={formData.cargo} 
+                onChange={handleChange} 
+              />
               {errors.cargo && <p className="error">{errors.cargo}</p>}
             </div>
             <div className="contact-item">
               <label>Número Telefónico:</label>
-              <input type="text" name="numero_telefonico" value={formData.numero_telefonico} onChange={handleChange} />
+              <input 
+                type="text" 
+                name="numero_telefonico" 
+                value={formData.numero_telefonico} 
+                onChange={handleChange} 
+              />
               {errors.numero_telefonico && <p className="error">{errors.numero_telefonico}</p>}
             </div>
             <div className="contact-item">
               <label>Email:</label>
-              <input type="email" name="email" value={formData.email} onChange={handleChange} />
+              <input 
+                type="email" 
+                name="email" 
+                value={formData.email} 
+                onChange={handleChange} 
+              />
               {errors.email && <p className="error">{errors.email}</p>}
             </div>
             <div className="contact-item">
-              <label>Compañia:</label>
-              <input type="text" name="compania" value={formData.compania} onChange={handleChange} />
+              <label>Compañía:</label>
+              <input 
+                type="text" 
+                name="compania" 
+                value={formData.compania} 
+                onChange={handleChange} 
+              />
               {errors.compania && <p className="error">{errors.compania}</p>}
             </div>
             <div className="contact-item">
               <label>Teléfono Empresa:</label>
-              <input type="text" name="telefono_empresa" value={formData.telefono_empresa} onChange={handleChange} />
+              <input 
+                type="text" 
+                name="telefono_empresa" 
+                value={formData.telefono_empresa} 
+                onChange={handleChange} 
+              />
               {errors.telefono_empresa && <p className="error">{errors.telefono_empresa}</p>}
             </div>
             <div className="contact-item">
               <label>Teléfono Internacional:</label>
-              <input type="text" name="telefono_internacional" value={formData.telefono_internacional} onChange={handleChange} />
+              <input 
+                type="text" 
+                name="telefono_internacional" 
+                value={formData.telefono_internacional} 
+                onChange={handleChange} 
+              />
               {errors.telefono_internacional && <p className="error">{errors.telefono_internacional}</p>}
             </div>
             <div className="download-btn">

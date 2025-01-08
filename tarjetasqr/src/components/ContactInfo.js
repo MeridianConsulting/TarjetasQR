@@ -11,13 +11,12 @@ const ContactInfo = ({ userId }) => {
   useEffect(() => {
     const fetchContactData = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/empleados/${userId}`);
+        const response = await fetch(`http://localhost/tarjetasqr/server-php/employees/${userId}`);
         if (!response.ok) {
-          throw new Error('Error al obtener los datos del empleado');
+          throw new Error(`Error al obtener los datos: ${response.statusText}`);
         }
+  
         const data = await response.json();
-        
-        // Asegúrate de que los datos existen en la respuesta
         if (data.email && data.numero_telefonico) {
           setContactData({
             email: data.email,
@@ -26,15 +25,16 @@ const ContactInfo = ({ userId }) => {
         } else {
           throw new Error('Datos incompletos del empleado');
         }
-        setLoading(false);
       } catch (error) {
-        setError(error.message);
+        setError(error.message || 'Error desconocido');
+      } finally {
         setLoading(false);
       }
     };
-
+  
     fetchContactData();
   }, [userId]);
+  
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;

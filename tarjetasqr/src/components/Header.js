@@ -8,17 +8,21 @@ const Header = ({ userId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Obtener los datos del empleado (nombre y cargo)
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/empleados/${userId}`);
+        const response = await fetch(`http://localhost/tarjetasqr/server-php/employees/${userId}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
         if (!response.ok) {
-          throw new Error("Error al obtener los datos del empleado");
+          throw new Error(`Error al obtener los datos: ${response.statusText}`);
         }
+
         const data = await response.json();
 
-        // Asegúrate de que los datos existen en la respuesta
         if (data.nombre && data.cargo) {
           setUserData({
             nombre: data.nombre,
@@ -27,9 +31,9 @@ const Header = ({ userId }) => {
         } else {
           throw new Error("Datos incompletos del empleado");
         }
-        setLoading(false);
       } catch (error) {
-        setError(error.message);
+        setError(error.message || "Error desconocido");
+      } finally {
         setLoading(false);
       }
     };
@@ -45,15 +49,16 @@ const Header = ({ userId }) => {
       <img
         src="https://cdn-icons-png.flaticon.com/512/5324/5324000.png"
         alt="Profile"
+        className="profile-img"
       />
       <h2>{userData.nombre}</h2>
       <p>{userData.cargo}</p>
       <div className="header-buttons">
         <button className="call-button">
-          <i className="fa fa-phone"></i> Call
+          📞 Llamar
         </button>
         <button className="email-button">
-          <i className="fa fa-envelope"></i> Email
+          📧 Enviar Email
         </button>
       </div>
     </header>
