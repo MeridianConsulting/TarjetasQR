@@ -66,7 +66,8 @@ const Form = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost/tarjetasqr/server-php/employees', {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL; // Usa la variable de entorno
+      const response = await fetch(`${apiUrl}/employees`, {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {

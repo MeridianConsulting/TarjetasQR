@@ -11,7 +11,8 @@ const ContactInfo = ({ userId }) => {
   useEffect(() => {
     const fetchContactData = async () => {
       try {
-        const response = await fetch(`http://localhost/tarjetasqr/server-php/employees/${userId}`);
+        const apiUrl = process.env.REACT_APP_API_BASE_URL; // Usa la variable de entorno
+        const response = await fetch(`${apiUrl}/employees/${userId}`);
         if (!response.ok) {
           throw new Error(`Error al obtener los datos: ${response.statusText}`);
         }
@@ -34,7 +35,6 @@ const ContactInfo = ({ userId }) => {
   
     fetchContactData();
   }, [userId]);
-  
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -50,7 +50,7 @@ const ContactInfo = ({ userId }) => {
         <small>Email</small>
       </div>
       <div className="contact-item">
-        <p>🏢 <span>Meridian Consulting LTA</span></p>
+        <p>🏢 <span>Meridian Consulting LTDA</span></p>
         <small>Company</small>
       </div>
       <div className="contact-item">
