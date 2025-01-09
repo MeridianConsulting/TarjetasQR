@@ -3,7 +3,7 @@ import '../assets/css/admin.css';
 
 const AdminPage = ({ onLogout }) => {
   const [empleados, setEmpleados] = useState([]);
-  const [editEmpleado, setEditEmpleado] = useState(null); // Estado para el empleado en edición
+  const [editEmpleado, setEditEmpleado] = useState(null);
 
   const [newEmpleado, setNewEmpleado] = useState({
     nombre: '',
@@ -15,9 +15,10 @@ const AdminPage = ({ onLogout }) => {
     telefono_internacional: '',
   });
 
+  // Mover la función fuera del useEffect
   const fetchEmpleados = async () => {
     try {
-      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/employees'); // Ruta corregida
+      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/employees');
       if (!response.ok) {
         throw new Error('Error al obtener empleados');
       }
@@ -27,20 +28,9 @@ const AdminPage = ({ onLogout }) => {
       console.error('Error al obtener empleados:', error);
     }
   };
-  
+
+  // Usar la función directamente dentro del useEffect
   useEffect(() => {
-    const fetchEmpleados = async () => {
-      try {
-        const response = await fetch('http://localhost/tarjetasqr/server-php/admin/employees'); // Ruta corregida
-        if (!response.ok) {
-          throw new Error('Error al obtener empleados');
-        }
-        const data = await response.json();
-        setEmpleados(data);
-      } catch (error) {
-        console.error('Error al obtener empleados:', error);
-      }
-    };
     fetchEmpleados();
   }, []);
 
@@ -79,7 +69,7 @@ const AdminPage = ({ onLogout }) => {
         telefono_empresa: '',
         telefono_internacional: '',
       });
-      await fetchEmpleados(); 
+      fetchEmpleados(); // Actualizar la lista de empleados
     } catch (error) {
       console.error('Error al crear empleado:', error);
     }
@@ -101,7 +91,7 @@ const AdminPage = ({ onLogout }) => {
   };
 
   const handleEditEmpleado = (empleado) => {
-    setEditEmpleado(empleado); // Cargar los datos del empleado en edición
+    setEditEmpleado(empleado);
   };
 
   const handleUpdateEmpleado = async () => {
@@ -122,14 +112,14 @@ const AdminPage = ({ onLogout }) => {
           empleado.Id === editEmpleado.Id ? editEmpleado : empleado
         )
       );
-      setEditEmpleado(null); // Cerrar el modal
+      setEditEmpleado(null);
     } catch (error) {
       console.error('Error al actualizar empleado:', error);
     }
   };
 
   const handleCancelEdit = () => {
-    setEditEmpleado(null); // Cerrar el modal sin guardar cambios
+    setEditEmpleado(null);
   };
 
   return (
@@ -150,33 +140,33 @@ const AdminPage = ({ onLogout }) => {
           </tr>
         </thead>
         <tbody>
-            {empleados.map((empleado) => (
-              <tr key={empleado.Id}> {/* Asegúrate de que Id sea único */}
-                <td>{empleado.Id}</td>
-                <td>{empleado.nombre}</td>
-                <td>{empleado.cargo}</td>
-                <td>{empleado.numero_telefonico}</td>
-                <td>{empleado.email}</td>
-                <td>{empleado.compania}</td>
-                <td>{empleado.telefono_empresa}</td>
-                <td>{empleado.telefono_internacional}</td>
-                <td>
-                  <button
-                    className="admin-page__button admin-page__button--edit"
-                    onClick={() => handleEditEmpleado(empleado)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="admin-page__button admin-page__button--delete"
-                    onClick={() => handleDeleteEmpleado(empleado.Id)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {empleados.map((empleado, index) => (<tr key={empleado.Id || `empleado-${index}`}>
+      <td>{empleado.Id}</td>
+      <td>{empleado.nombre}</td>
+      <td>{empleado.cargo}</td>
+      <td>{empleado.numero_telefonico}</td>
+      <td>{empleado.email}</td>
+      <td>{empleado.compania}</td>
+      <td>{empleado.telefono_empresa}</td>
+      <td>{empleado.telefono_internacional}</td>
+      <td>
+        <button
+          className="admin-page__button admin-page__button--edit"
+          onClick={() => handleEditEmpleado(empleado)}
+        >
+          Editar
+        </button>
+        <button
+          className="admin-page__button admin-page__button--delete"
+          onClick={() => handleDeleteEmpleado(empleado.Id)}
+        >
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
       </table>
 
       {editEmpleado && (
