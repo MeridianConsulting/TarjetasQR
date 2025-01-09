@@ -120,13 +120,16 @@ const AdminPage = ({ onLogout }) => {
     setEditEmpleado(null);
   };
 
-    // Filtrar empleados basado en el término de búsqueda
-    const filteredEmpleados = empleados.filter(empleado =>
-      empleado.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      empleado.cargo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      empleado.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEmpleados = empleados.filter(empleado => {
+    const nombre = empleado.nombre?.toLowerCase() || '';
+    const cargo = empleado.cargo?.toLowerCase() || '';
+    const email = empleado.email?.toLowerCase() || '';
+    return (
+      nombre.includes(searchTerm.toLowerCase()) ||
+      cargo.includes(searchTerm.toLowerCase()) ||
+      email.includes(searchTerm.toLowerCase())
     );
-
+  });
     return (
       <div className="admin-page">
         <h1 className="admin-page__title">Admin Dashboard</h1>
