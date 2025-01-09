@@ -12,13 +12,26 @@ const AdminPage = ({ onLogout }) => {
     email: '',
     compania: '',
     telefono_empresa: '',
-    telefono_internacional: ''
+    telefono_internacional: '',
   });
 
+  const fetchEmpleados = async () => {
+    try {
+      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/employees'); // Ruta corregida
+      if (!response.ok) {
+        throw new Error('Error al obtener empleados');
+      }
+      const data = await response.json();
+      setEmpleados(data);
+    } catch (error) {
+      console.error('Error al obtener empleados:', error);
+    }
+  };
+  
   useEffect(() => {
     const fetchEmpleados = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/admin/employees');
+        const response = await fetch('http://localhost/tarjetasqr/server-php/admin/employees'); // Ruta corregida
         if (!response.ok) {
           throw new Error('Error al obtener empleados');
         }
@@ -44,15 +57,16 @@ const AdminPage = ({ onLogout }) => {
   const handleCreateEmpleado = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/api/admin/employees', {
+      const response = await fetch('http://localhost/tarjetasqr/server-php/employees', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newEmpleado)
+        body: JSON.stringify(newEmpleado),
       });
       if (!response.ok) {
-        throw new Error('Error al crear empleado');
+        const errorText = await response.text();
+        throw new Error(`Error al crear empleado: ${errorText}`);
       }
       const data = await response.json();
       setEmpleados([...empleados, data]);
@@ -63,8 +77,9 @@ const AdminPage = ({ onLogout }) => {
         email: '',
         compania: '',
         telefono_empresa: '',
-        telefono_internacional: ''
+        telefono_internacional: '',
       });
+      await fetchEmpleados(); 
     } catch (error) {
       console.error('Error al crear empleado:', error);
     }
@@ -72,11 +87,12 @@ const AdminPage = ({ onLogout }) => {
 
   const handleDeleteEmpleado = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/admin/employees/${id}`, {
-        method: 'DELETE'
+      const response = await fetch(`http://localhost/tarjetasqr/server-php/admin/employees/${id}`, {
+        method: 'DELETE',
       });
       if (!response.ok) {
-        throw new Error('Error al eliminar empleado');
+        const errorText = await response.text();
+        throw new Error(`Error al eliminar empleado: ${errorText}`);
       }
       setEmpleados(empleados.filter((empleado) => empleado.Id !== id));
     } catch (error) {
@@ -90,15 +106,16 @@ const AdminPage = ({ onLogout }) => {
 
   const handleUpdateEmpleado = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/admin/employees/${editEmpleado.Id}`, {
+      const response = await fetch(`http://localhost/tarjetasqr/server-php/admin/employees/${editEmpleado.Id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editEmpleado)
+        body: JSON.stringify(editEmpleado),
       });
       if (!response.ok) {
-        throw new Error('Error al actualizar empleado');
+        const errorText = await response.text();
+        throw new Error(`Error al actualizar empleado: ${errorText}`);
       }
       setEmpleados(
         empleados.map((empleado) =>
@@ -133,33 +150,33 @@ const AdminPage = ({ onLogout }) => {
           </tr>
         </thead>
         <tbody>
-          {empleados.map((empleado) => (
-            <tr key={empleado.Id}>
-              <td>{empleado.Id}</td>
-              <td>{empleado.nombre}</td>
-              <td>{empleado.cargo}</td>
-              <td>{empleado.numero_telefonico}</td>
-              <td>{empleado.email}</td>
-              <td>{empleado.compania}</td>
-              <td>{empleado.telefono_empresa}</td>
-              <td>{empleado.telefono_internacional}</td>
-              <td>
-                <button
-                  className="admin-page__button admin-page__button--edit"
-                  onClick={() => handleEditEmpleado(empleado)}
-                >
-                  Editar
-                </button>
-                <button
-                  className="admin-page__button admin-page__button--delete"
-                  onClick={() => handleDeleteEmpleado(empleado.Id)}
-                >
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+            {empleados.map((empleado) => (
+              <tr key={empleado.Id}> {/* Asegúrate de que Id sea único */}
+                <td>{empleado.Id}</td>
+                <td>{empleado.nombre}</td>
+                <td>{empleado.cargo}</td>
+                <td>{empleado.numero_telefonico}</td>
+                <td>{empleado.email}</td>
+                <td>{empleado.compania}</td>
+                <td>{empleado.telefono_empresa}</td>
+                <td>{empleado.telefono_internacional}</td>
+                <td>
+                  <button
+                    className="admin-page__button admin-page__button--edit"
+                    onClick={() => handleEditEmpleado(empleado)}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    className="admin-page__button admin-page__button--delete"
+                    onClick={() => handleDeleteEmpleado(empleado.Id)}
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
       </table>
 
       {editEmpleado && (
@@ -239,7 +256,6 @@ const AdminPage = ({ onLogout }) => {
           </form>
         </div>
       )}
-
       <h2 className="admin-page__subtitle">Añadir Nuevo Empleado</h2>
       <form className="admin-page__form" onSubmit={handleCreateEmpleado}>
         <input
@@ -306,7 +322,6 @@ const AdminPage = ({ onLogout }) => {
           Crear
         </button>
       </form>
-
       <button className="admin-page__button admin-page__button--logout" onClick={onLogout}>
         Cerrar sesión
       </button>

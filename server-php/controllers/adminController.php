@@ -3,7 +3,6 @@ require_once __DIR__ . '/../config/db.php';
 
 class AdminController {
     private $db;
-
     public function __construct() {
         $this->db = (new Database())->getConnection();
     }
@@ -34,20 +33,37 @@ class AdminController {
             echo json_encode(["success" => false, "message" => $e->getMessage()]);
         }
     }    
-     
-    // Obtener todos los empleados
-    public static function getEmployees() {
-        $query = "SELECT * FROM empleados";
-        $result = $GLOBALS['db']->query($query);
+    
 
-        if (!$result) {
+
+    // Obtener todos los empleados
+    public function getEmployees() {
+        global $db;
+        $sql = 'SELECT * FROM empleados';
+        $stmt = $db->prepare($sql);
+    
+        if (!$stmt) {
             http_response_code(500);
-            echo json_encode(["message" => "Error al obtener los empleados"]);
+            echo json_encode(["error" => "Error al preparar la consulta", "detalle" => $db->error]);
             return;
         }
-
-        echo json_encode($result->fetch_all(MYSQLI_ASSOC));
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows === 0) {
+            http_response_code(404);
+            echo json_encode(["error" => "No se encontraron empleados"]);
+        } else {
+            $empleados = $result->fetch_all(MYSQLI_ASSOC);
+            echo json_encode($empleados);
+        }
+    
+        $stmt->close();
     }
+    
+
+
 
     // Obtener un empleado por ID
     public static function getEmployeeById($id) {
@@ -67,28 +83,38 @@ class AdminController {
     }
 
     // Crear un empleado
-    public static function createEmployee($request) {
-        $query = "INSERT INTO empleados (nombre, cargo, numero_telefonico, email, compania, telefono_empresa, telefono_internacional) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $GLOBALS['db']->prepare($query);
+    public function crearEmpleado($data) {
+        global $db;
+        
+        $sql = 'INSERT INTO empleados (nombre, cargo, numero_telefonico, email, compania, telefono_empresa, telefono_internacional) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)';
 
-        $stmt->bind_param(
-            "sssssss",
-            $request['nombre'],
-            $request['cargo'],
-            $request['numero_telefonico'],
-            $request['email'],
-            $request['compania'],
-            $request['telefono_empresa'],
-            $request['telefono_internacional']
-        );
-
-        if (!$stmt->execute()) {
+        $stmt = $db->prepare($sql);
+        if (!$stmt) {
             http_response_code(500);
-            echo json_encode(["message" => "Error al crear el empleado"]);
+            echo json_encode(["success" => false, "error" => "Error al preparar la consulta", "detalle" => $db->error]);
             return;
         }
 
-        echo json_encode(["message" => "Empleado creado con éxito", "id" => $stmt->insert_id]);
+        $stmt->bind_param("sssssss", 
+            $data['nombre'], 
+            $data['cargo'], 
+            $data['numero_telefonico'], 
+            $data['email'], 
+            $data['compania'], 
+            $data['telefono_empresa'], 
+            $data['telefono_internacional']
+        );
+
+        if ($stmt->execute()) {
+            http_response_code(201);
+            echo json_encode(["success" => true, "message" => "Empleado creado exitosamente", "id" => $stmt->insert_id]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["success" => false, "error" => "Error al insertar empleado", "detalle" => $stmt->error]);
+        }
+
+        $stmt->close();
     }
 
     // Actualizar un empleado

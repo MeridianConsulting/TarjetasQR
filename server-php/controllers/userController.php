@@ -54,6 +54,7 @@ public function obtenerEmpleadoPorId($id) {
             echo json_encode($empleado);
         }
     }
+    
 
     $stmt->close();
 }
