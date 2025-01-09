@@ -4,7 +4,6 @@ import '../assets/css/admin.css';
 const AdminPage = ({ onLogout }) => {
   const [empleados, setEmpleados] = useState([]);
   const [editEmpleado, setEditEmpleado] = useState(null);
-
   const [newEmpleado, setNewEmpleado] = useState({
     nombre: '',
     cargo: '',
@@ -14,7 +13,7 @@ const AdminPage = ({ onLogout }) => {
     telefono_empresa: '',
     telefono_internacional: '',
   });
-
+  const [searchTerm, setSearchTerm] = useState('');
   // Mover la función fuera del useEffect
   const fetchEmpleados = async () => {
     try {
@@ -28,7 +27,6 @@ const AdminPage = ({ onLogout }) => {
       console.error('Error al obtener empleados:', error);
     }
   };
-
   // Usar la función directamente dentro del useEffect
   useEffect(() => {
     fetchEmpleados();
@@ -122,201 +120,221 @@ const AdminPage = ({ onLogout }) => {
     setEditEmpleado(null);
   };
 
-  return (
-    <div className="admin-page">
-      <h1 className="admin-page__title">Admin Dashboard</h1>
-      <table className="admin-page__table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Cargo</th>
-            <th>Número Telefónico</th>
-            <th>Email</th>
-            <th>Compañía</th>
-            <th>Teléfono Empresa</th>
-            <th>Teléfono Internacional</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-  {empleados.map((empleado, index) => (<tr key={empleado.Id || `empleado-${index}`}>
-      <td>{empleado.Id}</td>
-      <td>{empleado.nombre}</td>
-      <td>{empleado.cargo}</td>
-      <td>{empleado.numero_telefonico}</td>
-      <td>{empleado.email}</td>
-      <td>{empleado.compania}</td>
-      <td>{empleado.telefono_empresa}</td>
-      <td>{empleado.telefono_internacional}</td>
-      <td>
-        <button
-          className="admin-page__button admin-page__button--edit"
-          onClick={() => handleEditEmpleado(empleado)}
-        >
-          Editar
-        </button>
-        <button
-          className="admin-page__button admin-page__button--delete"
-          onClick={() => handleDeleteEmpleado(empleado.Id)}
-        >
-          Eliminar
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
+    // Filtrar empleados basado en el término de búsqueda
+    const filteredEmpleados = empleados.filter(empleado =>
+      empleado.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      empleado.cargo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      empleado.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-      </table>
-
-      {editEmpleado && (
-        <div className="admin-page__modal">
-          <h2>Editar Empleado</h2>
-          <form className="admin-page__form">
-            <input
-              className="admin-page__input"
-              type="text"
-              name="nombre"
-              placeholder="Nombre"
-              value={editEmpleado.nombre}
-              onChange={handleEditInputChange}
-            />
-            <input
-              className="admin-page__input"
-              type="text"
-              name="cargo"
-              placeholder="Cargo"
-              value={editEmpleado.cargo}
-              onChange={handleEditInputChange}
-            />
-            <input
-              className="admin-page__input"
-              type="text"
-              name="numero_telefonico"
-              placeholder="Número Telefónico"
-              value={editEmpleado.numero_telefonico}
-              onChange={handleEditInputChange}
-            />
-            <input
-              className="admin-page__input"
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={editEmpleado.email}
-              onChange={handleEditInputChange}
-            />
-            <input
-              className="admin-page__input"
-              type="text"
-              name="compania"
-              placeholder="Compañía"
-              value={editEmpleado.compania}
-              onChange={handleEditInputChange}
-            />
-            <input
-              className="admin-page__input"
-              type="text"
-              name="telefono_empresa"
-              placeholder="Teléfono Empresa"
-              value={editEmpleado.telefono_empresa}
-              onChange={handleEditInputChange}
-            />
-            <input
-              className="admin-page__input"
-              type="text"
-              name="telefono_internacional"
-              placeholder="Teléfono Internacional"
-              value={editEmpleado.telefono_internacional}
-              onChange={handleEditInputChange}
-            />
-            <button
-              className="admin-page__button admin-page__button--submit"
-              type="button"
-              onClick={handleUpdateEmpleado}
-            >
-              Guardar Cambios
-            </button>
-            <button
-              className="admin-page__button admin-page__button--cancel"
-              type="button"
-              onClick={handleCancelEdit}
-            >
-              Cancelar
-            </button>
-          </form>
+    return (
+      <div className="admin-page">
+        <h1 className="admin-page__title">Admin Dashboard</h1>
+  
+        {/* Barra de búsqueda */}
+        <div className="admin-page__search">
+          <input
+            type="text"
+            className="admin-page__search-input"
+            placeholder="Buscar por nombre, cargo o email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      )}
-      <h2 className="admin-page__subtitle">Añadir Nuevo Empleado</h2>
-      <form className="admin-page__form" onSubmit={handleCreateEmpleado}>
-        <input
-          className="admin-page__input"
-          type="text"
-          name="nombre"
-          placeholder="Nombre"
-          value={newEmpleado.nombre}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          className="admin-page__input"
-          type="text"
-          name="cargo"
-          placeholder="Cargo"
-          value={newEmpleado.cargo}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          className="admin-page__input"
-          type="text"
-          name="numero_telefonico"
-          placeholder="Número Telefónico"
-          value={newEmpleado.numero_telefonico}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          className="admin-page__input"
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={newEmpleado.email}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          className="admin-page__input"
-          type="text"
-          name="compania"
-          placeholder="Compañía"
-          value={newEmpleado.compania}
-          onChange={handleInputChange}
-        />
-        <input
-          className="admin-page__input"
-          type="text"
-          name="telefono_empresa"
-          placeholder="Teléfono Empresa"
-          value={newEmpleado.telefono_empresa}
-          onChange={handleInputChange}
-        />
-        <input
-          className="admin-page__input"
-          type="text"
-          name="telefono_internacional"
-          placeholder="Teléfono Internacional"
-          value={newEmpleado.telefono_internacional}
-          onChange={handleInputChange}
-        />
-        <button className="admin-page__button admin-page__button--submit" type="submit">
-          Crear
+  
+        <table className="admin-page__table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Cargo</th>
+              <th>Número Telefónico</th>
+              <th>Email</th>
+              <th>Compañía</th>
+              <th>Teléfono Empresa</th>
+              <th>Teléfono Internacional</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredEmpleados.map((empleado, index) => (
+              <tr key={empleado.Id || `empleado-${index}`}>
+                <td>{empleado.Id}</td>
+                <td>{empleado.nombre}</td>
+                <td>{empleado.cargo}</td>
+                <td>{empleado.numero_telefonico}</td>
+                <td>{empleado.email}</td>
+                <td>{empleado.compania}</td>
+                <td>{empleado.telefono_empresa}</td>
+                <td>{empleado.telefono_internacional}</td>
+                <td>
+                  <button
+                    className="admin-page__button admin-page__button--edit"
+                    onClick={() => handleEditEmpleado(empleado)}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    className="admin-page__button admin-page__button--delete"
+                    onClick={() => handleDeleteEmpleado(empleado.Id)}
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+  
+        {editEmpleado && (
+          <div className="admin-page__modal">
+            <h2>Editar Empleado</h2>
+            <form className="admin-page__form">
+              <input
+                className="admin-page__input"
+                type="text"
+                name="nombre"
+                placeholder="Nombre"
+                value={editEmpleado.nombre}
+                onChange={handleEditInputChange}
+              />
+              <input
+                className="admin-page__input"
+                type="text"
+                name="cargo"
+                placeholder="Cargo"
+                value={editEmpleado.cargo}
+                onChange={handleEditInputChange}
+              />
+              <input
+                className="admin-page__input"
+                type="text"
+                name="numero_telefonico"
+                placeholder="Número Telefónico"
+                value={editEmpleado.numero_telefonico}
+                onChange={handleEditInputChange}
+              />
+              <input
+                className="admin-page__input"
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={editEmpleado.email}
+                onChange={handleEditInputChange}
+              />
+              <input
+                className="admin-page__input"
+                type="text"
+                name="compania"
+                placeholder="Compañía"
+                value={editEmpleado.compania}
+                onChange={handleEditInputChange}
+              />
+              <input
+                className="admin-page__input"
+                type="text"
+                name="telefono_empresa"
+                placeholder="Teléfono Empresa"
+                value={editEmpleado.telefono_empresa}
+                onChange={handleEditInputChange}
+              />
+              <input
+                className="admin-page__input"
+                type="text"
+                name="telefono_internacional"
+                placeholder="Teléfono Internacional"
+                value={editEmpleado.telefono_internacional}
+                onChange={handleEditInputChange}
+              />
+              <button
+                className="admin-page__button admin-page__button--submit"
+                type="button"
+                onClick={handleUpdateEmpleado}
+              >
+                Guardar Cambios
+              </button>
+              <button
+                className="admin-page__button admin-page__button--cancel"
+                type="button"
+                onClick={handleCancelEdit}
+              >
+                Cancelar
+              </button>
+            </form>
+          </div>
+        )}
+        
+        <h2 className="admin-page__subtitle">Añadir Nuevo Empleado</h2>
+        <form className="admin-page__form" onSubmit={handleCreateEmpleado}>
+          <input
+            className="admin-page__input"
+            type="text"
+            name="nombre"
+            placeholder="Nombre"
+            value={newEmpleado.nombre}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            className="admin-page__input"
+            type="text"
+            name="cargo"
+            placeholder="Cargo"
+            value={newEmpleado.cargo}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            className="admin-page__input"
+            type="text"
+            name="numero_telefonico"
+            placeholder="Número Telefónico"
+            value={newEmpleado.numero_telefonico}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            className="admin-page__input"
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={newEmpleado.email}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            className="admin-page__input"
+            type="text"
+            name="compania"
+            placeholder="Compañía"
+            value={newEmpleado.compania}
+            onChange={handleInputChange}
+          />
+          <input
+            className="admin-page__input"
+            type="text"
+            name="telefono_empresa"
+            placeholder="Teléfono Empresa"
+            value={newEmpleado.telefono_empresa}
+            onChange={handleInputChange}
+          />
+          <input
+            className="admin-page__input"
+            type="text"
+            name="telefono_internacional"
+            placeholder="Teléfono Internacional"
+            value={newEmpleado.telefono_internacional}
+            onChange={handleInputChange}
+          />
+          <button className="admin-page__button admin-page__button--submit" type="submit">
+            Crear
+          </button>
+        </form>
+        <button className="admin-page__button admin-page__button--logout" onClick={onLogout}>
+          Cerrar sesión
         </button>
-      </form>
-      <button className="admin-page__button admin-page__button--logout" onClick={onLogout}>
-        Cerrar sesión
-      </button>
-    </div>
-  );
-};
+      </div>
+    );
+  };
 
 export default AdminPage;

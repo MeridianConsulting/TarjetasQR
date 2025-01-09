@@ -1,12 +1,10 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
-
 class AdminController {
     private $db;
     public function __construct() {
         $this->db = (new Database())->getConnection();
     }
-
     public function validateLogin($data) {
         if (!isset($data['username'], $data['password'])) {
             http_response_code(400);
@@ -33,9 +31,6 @@ class AdminController {
             echo json_encode(["success" => false, "message" => $e->getMessage()]);
         }
     }    
-    
-
-
     // Obtener todos los empleados
     public function getEmployees() {
         global $db;
@@ -61,10 +56,6 @@ class AdminController {
     
         $stmt->close();
     }
-    
-
-
-
     // Obtener un empleado por ID
     public static function getEmployeeById($id) {
         $query = "SELECT * FROM empleados WHERE id = ?";
@@ -81,7 +72,6 @@ class AdminController {
 
         echo json_encode($result->fetch_assoc());
     }
-
     // Crear un empleado
     public function crearEmpleado($data) {
         global $db;
@@ -116,7 +106,6 @@ class AdminController {
 
         $stmt->close();
     }
-
     // Actualizar un empleado
     public static function updateEmployee($id, $request) {
         $query = "UPDATE empleados SET nombre = ?, cargo = ?, numero_telefonico = ?, email = ?, compania = ?, telefono_empresa = ?, telefono_internacional = ? WHERE id = ?";
@@ -148,7 +137,6 @@ class AdminController {
 
         echo json_encode(["message" => "Empleado actualizado con éxito", "id" => $id]);
     }
-
     // Eliminar un empleado
     public static function deleteEmployee($id) {
         $query = "DELETE FROM empleados WHERE id = ?";
@@ -169,7 +157,6 @@ class AdminController {
 
         echo json_encode(["message" => "Empleado eliminado con éxito"]);
     }
-
     // Obtener estadísticas de empleados
     public static function getEmployeeStatistics() {
         $query = "SELECT puesto, COUNT(*) as count, AVG(salario) as avgSalary FROM empleados GROUP BY puesto";
@@ -183,24 +170,5 @@ class AdminController {
 
         echo json_encode($result->fetch_all(MYSQLI_ASSOC));
     }
-
-    // Buscar empleados por nombre
-    public static function searchEmployeesByName($nombre) {
-        $query = "SELECT * FROM empleados WHERE nombre LIKE ?";
-        $stmt = $GLOBALS['db']->prepare($query);
-        $search = "%" . $nombre . "%";
-        $stmt->bind_param("s", $search);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if (!$result) {
-            http_response_code(500);
-            echo json_encode(["message" => "Error al buscar empleados"]);
-            return;
-        }
-
-        echo json_encode($result->fetch_all(MYSQLI_ASSOC));
-    }
 }
-
 ?>
