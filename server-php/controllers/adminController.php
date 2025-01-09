@@ -2,70 +2,38 @@
 require_once __DIR__ . '/../config/db.php';
 
 class AdminController {
-    // Validar credenciales del administrador
-    public function validateLogin($data)
-    {
-        // Configurar el encabezado para devolver JSON
-        header('Content-Type: application/json; charset=utf-8');
-    
-        // Verificar si el cuerpo de la solicitud tiene los datos requeridos
-        if (!isset($data['username']) || !isset($data['password'])) {
+    private $db;
+
+    public function __construct() {
+        $this->db = (new Database())->getConnection();
+    }
+
+    public function validateLogin($data) {
+        if (!isset($data['username'], $data['password'])) {
             http_response_code(400);
             echo json_encode(["success" => false, "message" => "Username y password son requeridos."]);
             return;
         }
-    
-        $username = $data['username'];
-        $password = $data['password'];
-    
-        // Conexión a la base de datos
-        $db = Database::getConnection();
-    
+
         try {
-            // Consultar al usuario en la base de datos
-            $stmt = $db->prepare("SELECT id, password FROM admins WHERE username = ?");
-            $stmt->bind_param("s", $username);
+            $stmt = $this->db->prepare("SELECT id, password FROM admins WHERE username = ? AND password = ?");
+            $stmt->bind_param("ss", $data['username'], $data['password']);
             $stmt->execute();
             $result = $stmt->get_result();
-    
-            // Verificar si el usuario existe
+
             if ($result->num_rows === 0) {
                 http_response_code(401);
                 echo json_encode(["success" => false, "message" => "Credenciales incorrectas."]);
                 return;
             }
-    
-            $admin = $result->fetch_assoc();
-            $db_password = $admin['password'];
-    
-            // Verificar el password
-            if (!password_verify($password, $db_password)) {
-                http_response_code(401);
-                echo json_encode(["success" => false, "message" => "Credenciales incorrectas."]);
-                return;
-            }
-    
-            // Respuesta exitosa
+
             http_response_code(200);
-            echo json_encode([
-                "success" => true,
-                "message" => "Login exitoso.",
-                "redirect" => "/admin"
-            ]);
+            echo json_encode(["success" => true, "message" => "Login exitoso."]);
         } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode([
-                "success" => false,
-                "message" => "Error interno del servidor.",
-                "error" => $e->getMessage()
-            ]);
-        } finally {
-            // Cerrar la conexión y la declaración preparada
-            if (isset($stmt)) $stmt->close();
-            $db->close();
+            echo json_encode(["success" => false, "message" => $e->getMessage()]);
         }
-    }
-    
+    }    
      
     // Obtener todos los empleados
     public static function getEmployees() {

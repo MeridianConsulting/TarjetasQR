@@ -5,21 +5,19 @@ require_once __DIR__ . '/middleware/cors.php';
 
 header("Content-Type: application/json");
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
-error_log("Method: $method, Path: $path");
-
+ini_set('display_errors', 0);
 
 // Captura el método y la ruta de la solicitud
 $method = $_SERVER['REQUEST_METHOD'];
 $path = trim(str_replace('/tarjetasqr/server-php', '', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), "/");
 
 // Debug para verificar la ruta
-error_log("Requested path: " . $path);
+error_log("Method: $method, Path: $path");
 
 // Manejador de rutas
 function handleRequest($method, $path) {
-    $path = trim($path, "/"); // Eliminar `/` inicial y final
-
+    $path = trim($path, "/");
+    
     // Rutas para usuarios
     if ($path === "users" && $method === "GET") {
         $controller = new UserController();
@@ -66,10 +64,6 @@ function handleRequest($method, $path) {
         $controller = new AdminController();
         $controller->validateLogin($data);
     }
-    
-        
-    
-
     // Si no se encuentra la ruta
     else {
         http_response_code(404);

@@ -8,24 +8,29 @@ const Login = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      setError('Por favor, complete todos los campos.');
+      return;
+    }
+
     setError(''); // Limpiar errores previos
+
     try {
-      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/login', { // Cambié la URL aquí
+      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
-  
+
       if (!response.ok) {
-        // Verificar si el servidor devuelve un error HTTP
         const errorText = await response.text();
         throw new Error(`Error del servidor: ${errorText}`);
       }
-  
-      const data = await response.json(); // Intentar analizar la respuesta como JSON
-  
+
+      const data = await response.json();
+
       if (data.success) {
         onLogin(); // Callback si el login es exitoso
         navigate('/admin');
@@ -34,10 +39,9 @@ const Login = ({ onLogin }) => {
       }
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
-      setError('No se pudo conectar con el servidor o la respuesta no es válida.');
+      setError('No se pudo conectar con el servidor. Verifique su conexión.');
     }
   };
-  
 
   return (
     <div className="login-container">
