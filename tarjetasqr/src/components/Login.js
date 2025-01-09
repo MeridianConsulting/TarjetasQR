@@ -16,7 +16,8 @@ const Login = ({ onLogin }) => {
     setError(''); // Limpiar errores previos
 
     try {
-      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/login', {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL; // Variable de entorno para la URL base
+      const response = await fetch(`${apiUrl}/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,10 +14,12 @@ const AdminPage = ({ onLogout }) => {
     telefono_internacional: '',
   });
   const [searchTerm, setSearchTerm] = useState('');
-  // Mover la función fuera del useEffect
+
+  const apiUrl = process.env.REACT_APP_API_BASE_URL; // Variable de entorno para la URL base
+
   const fetchEmpleados = async () => {
     try {
-      const response = await fetch('http://localhost/tarjetasqr/server-php/admin/employees');
+      const response = await fetch(`${apiUrl}/admin/employees`);
       if (!response.ok) {
         throw new Error('Error al obtener empleados');
       }
@@ -27,7 +29,7 @@ const AdminPage = ({ onLogout }) => {
       console.error('Error al obtener empleados:', error);
     }
   };
-  // Usar la función directamente dentro del useEffect
+
   useEffect(() => {
     fetchEmpleados();
   }, []);
@@ -45,7 +47,7 @@ const AdminPage = ({ onLogout }) => {
   const handleCreateEmpleado = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost/tarjetasqr/server-php/employees', {
+      const response = await fetch(`${apiUrl}/employees`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +77,7 @@ const AdminPage = ({ onLogout }) => {
 
   const handleDeleteEmpleado = async (id) => {
     try {
-      const response = await fetch(`http://localhost/tarjetasqr/server-php/admin/employees/${id}`, {
+      const response = await fetch(`${apiUrl}/admin/employees/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
@@ -94,7 +96,7 @@ const AdminPage = ({ onLogout }) => {
 
   const handleUpdateEmpleado = async () => {
     try {
-      const response = await fetch(`http://localhost/tarjetasqr/server-php/admin/employees/${editEmpleado.Id}`, {
+      const response = await fetch(`${apiUrl}/admin/employees/${editEmpleado.Id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
