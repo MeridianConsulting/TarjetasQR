@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
-import "../assets/css/header.css";
 
 const Header = ({ userId }) => {
   const [userData, setUserData] = useState({
