@@ -5,6 +5,7 @@ import ContactInfo from '../components/ContactInfo';
 import SocialMedia from '../components/SocialMedia';
 import DownloadVCard from '../components/DownloadVCard';
 import '../assets/css/styles.css'; // Importamos la hoja de estilos
+import '../assets/css/form.css';
 
 const ProfilePage = () => {
   const { id } = useParams(); // Obtener el parámetro :id de la URL

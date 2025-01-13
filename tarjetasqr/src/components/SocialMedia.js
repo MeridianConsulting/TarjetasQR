@@ -6,7 +6,7 @@ const SocialMedia = () => {
     <div className="social-media">
       <h3>Social Media</h3>
       <div className="social-media-icons">
-        <a href="" target="_blank" rel="noopener noreferrer" style={{ color: '#0077b5' }}>
+        <a href="https://co.linkedin.com/company/meridian-consulting-ltda?trk=public_profile_experience-item_profile-section-card_subtitle-click" target="_blank" rel="noopener noreferrer" style={{ color: '#0077b5' }}>
           <FaLinkedin />
         </a>
         <a href="" target="_blank" rel="noopener noreferrer" style={{ color: '#C13584' }}>

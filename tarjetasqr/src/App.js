@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import ProfilePage from './pages/ProfilePage';
 import Login from './components/Login';
 import AdminPage from './admin/AdminPage';
-import Form from './components/Form';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const ProtectedRoute = ({ element, authenticated }) => {
@@ -26,7 +25,6 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/login" element={<Login onLogin={loginHandler} />} />
-          <Route path="/form" element={<Form />} />
           <Route path="/ProfilePage/:id" element={<ProfilePage />} />
           <Route
             path="/admin"
@@ -37,7 +35,10 @@ function App() {
               />
             }
           />
-          <Route path="/" element={<Navigate to="/form" />} />
+          <Route
+            path="/"
+            element={<Navigate to="/ProfilePage/79613401" />}
+          />
         </Routes>
       </div>
     </Router>

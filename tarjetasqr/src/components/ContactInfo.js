@@ -5,6 +5,7 @@ const ContactInfo = ({ userId }) => {
     email: '',
     numero_telefonico: '',
   });
+  const [telefonoInternacional, setTelefonoInternacional] = useState(''); // Campo adicional
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -36,6 +37,21 @@ const ContactInfo = ({ userId }) => {
     fetchContactData();
   }, [userId]);
 
+  useEffect(() => {
+    // Verificar la URL actual
+    const currentUrl = window.location.href;
+    const matchingUrls = [
+      'https://tarjetaqr.transporteszircon.com/ProfilePage/79613401',
+      'https://tarjetaqr.transporteszircon.com/ProfilePage/79490148',
+    ];
+
+    if (matchingUrls.includes(currentUrl)) {
+      setTelefonoInternacional('Teléfono Internacional U.S.: (1) 713 623 1113'); // Establecer Teléfono Internacional en blanco
+    } else {
+      setTelefonoInternacional(''); // Número predeterminado
+    }
+  }, []);
+
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -57,6 +73,20 @@ const ContactInfo = ({ userId }) => {
         <p>🌐 <span><a href="https://meridianltda.com/" target="_blank" rel="noopener noreferrer">meridianltda.com</a></span></p>
         <small>Website</small>
       </div>
+      <div className="contact-item">
+        <p>📞 <span>(571) 7469090 Ext 1101</span></p>
+        <small>Teléfono Directo</small>
+      </div>
+      <div className="contact-item">
+        <p>📍 <span>Calle 67 No. 7 – 94 Piso 20 Bogota - Colombia</span></p>
+        <small>Dirección</small>
+      </div>
+      {telefonoInternacional !== '' && (
+        <div className="contact-item">
+          <p>🌎 <span>{telefonoInternacional}</span></p>
+          <small>Teléfono Internacional</small>
+        </div>
+      )}
     </div>
   );
 };

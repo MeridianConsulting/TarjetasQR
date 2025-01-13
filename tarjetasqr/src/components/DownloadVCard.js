@@ -28,12 +28,16 @@ const DownloadVCard = () => {
   };
 
   return (
-    <div className="download-btn">
-      <button onClick={generateQRCode}>📥 DOWNLOAD VCARD</button>
+    <div className="qr-container">
+      <button className="download-btn" onClick={generateQRCode}>
+        📥 GENERATE QR
+      </button>
       {qrCodeUrl && (
-        <div>
-          <img src={qrCodeUrl} alt="QR Code" style={{ marginTop: '20px', width: '200px' }} />
-          <button onClick={downloadQRCode} style={{ marginTop: '10px' }}>Download QR as JPG</button>
+        <div className="qr-output">
+          <img className="qr-image" src={qrCodeUrl} alt="QR Code" />
+          <button className="download-btn" onClick={downloadQRCode}>
+            Download QR as JPG
+          </button>
         </div>
       )}
     </div>
@@ -41,3 +45,4 @@ const DownloadVCard = () => {
 };
 
 export default DownloadVCard;
+
