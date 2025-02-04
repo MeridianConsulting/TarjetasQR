@@ -1,9 +1,9 @@
 <?php
 class Database {
     private $host = "localhost";
-    private $db_name = "transpo2_empleados_db";
-    private $username = "transpo2_empleados_db";
-    private $password = "empleados_db";
+    private $db_name = "empleados_db";
+    private $username = "root";
+    private $password = "";
     public $conn;
 
     public function getConnection() {

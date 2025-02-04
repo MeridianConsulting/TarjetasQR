@@ -12,11 +12,11 @@ const ProtectedRoute = ({ element, authenticated }) => {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const loginHandler = () => {
-    setIsAuthenticated(true);
+  const handleLogin = (success) => {
+    setIsAuthenticated(success);
   };
 
-  const logoutHandler = () => {
+  const handleLogout = () => {
     setIsAuthenticated(false);
   };
 
@@ -24,13 +24,16 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/login" element={<Login onLogin={loginHandler} />} />
+          <Route 
+            path="/login" 
+            element={<Login onLogin={handleLogin} />} 
+          />
           <Route path="/ProfilePage/:id" element={<ProfilePage />} />
           <Route
             path="/admin"
             element={
               <ProtectedRoute
-                element={<AdminPage onLogout={logoutHandler} />}
+                element={<AdminPage onLogout={handleLogout} />}
                 authenticated={isAuthenticated}
               />
             }
