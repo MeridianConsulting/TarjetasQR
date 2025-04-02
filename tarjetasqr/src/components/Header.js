@@ -35,8 +35,9 @@ const Header = ({ userId }) => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL;
         const response = await fetch(
-          `http://localhost/tarjetasqr/server-php/employees/${userId}`,
+          `${apiUrl}/employees/${userId}`,
           { headers: { "Content-Type": "application/json" } }
         );
 

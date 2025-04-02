@@ -40,22 +40,17 @@ const SocialMedia = () => {
         </a>
 
         {/* Instagram */}
-        <a href="#" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.instagram.com/meridian_consultingltda/ " target="_blank" rel="noopener noreferrer">
           <img className="social-icon" src={instagramImage} alt="Instagram" />
         </a>
 
-        {/* Facebook */}
-        <a href="#" target="_blank" rel="noopener noreferrer">
-          <img className="social-icon" src={facebookImage} alt="Facebook" />
-        </a>
-
         {/* Twitter / X */}
-        <a href="#" target="_blank" rel="noopener noreferrer">
+        <a href="https://x.com/meridianLTDA" target="_blank" rel="noopener noreferrer">
           <img className="social-icon" src={extensionImage} alt="Twitter / X" />
         </a>
 
         {/* TikTok */}
-        <a href="https://www.tiktok.com/@tu_usuario" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.tiktok.com/@meridianltda" target="_blank" rel="noopener noreferrer">
           <img className="social-icon" src={tiktokImage} alt="TikTok" />
         </a>
       </div>

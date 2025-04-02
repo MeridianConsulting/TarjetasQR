@@ -28,7 +28,8 @@ const ContactInfo = ({ userId }) => {
   useEffect(() => {
     const fetchContactData = async () => {
       try {
-        const response = await fetch(`http://localhost/tarjetasqr/server-php/employees/${userId}`);
+        const apiUrl = process.env.REACT_APP_API_BASE_URL; // Usa la variable de entorno
+        const response = await fetch(`${apiUrl}/employees/${userId}`);
         if (!response.ok) {
           throw new Error(`Error al obtener los datos: ${response.statusText}`);
         }
@@ -55,8 +56,8 @@ const ContactInfo = ({ userId }) => {
   useEffect(() => {
     const currentUrl = window.location.href;
     const matchingUrls = [
-      'http://localhost:3000/ProfilePage/79613401',
-      'http://localhost:3000/ProfilePage/79490148',
+      'https://tarjetaqr.transporteszircon.com/ProfilePage/79613401',
+      'https://tarjetaqr.transporteszircon.com/ProfilePage/79490148',
     ];
 
     if (matchingUrls.includes(currentUrl)) {
@@ -74,7 +75,7 @@ const ContactInfo = ({ userId }) => {
   const staticContactInfo = {
     empresa: 'Meridian Consulting LTDA',
     sitioWeb: 'https://meridianltda.com',
-    extension: '(571) 7469090 Ext 1101',
+    extension: '(601) 7469090',
     direccion: 'Calle 67 No. 7 – 94 Piso 20 Bogota - Colombia'
   };
 

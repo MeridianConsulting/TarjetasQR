@@ -14,8 +14,9 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL;
         const response = await fetch(
-          `http://localhost/tarjetasqr/server-php/employees/${id}`,
+          `${apiUrl}/employees/${id}`,
           { headers: { "Content-Type": "application/json" } }
         );
 
