@@ -797,3 +797,90 @@ body {
     bottom: calc(25vh + env(safe-area-inset-bottom));
   }
 }
+
+/* Aumentamos el z-index de la notificación de copiado */
+.copied-notification {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #63C9DB;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: smartSlide 0.5s ease, fadeOut 0.5s ease 1.5s forwards;
+  z-index: 10000; /* Subimos un poco más */
+  font-size: clamp(14px, 3.5vw, 16px);
+  max-width: 90%;
+  text-align: center;
+  pointer-events: none;
+  
+  bottom: max(
+    calc(30vh + env(safe-area-inset-bottom)), 
+    calc(50px + env(safe-area-inset-bottom))
+  );
+}
+
+/* Nuevo aviso inicial con animación "bounce" */
+.initial-tip {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #63C9DB;
+  color: #fff;
+  font-size: 16px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10001; /* Un poco más alto que la notificación de copiado */
+  animation: bounceIn 0.8s forwards ease-out; /* Aparece con animación */
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: translate(-50%, -150%) scale(0.9);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, 10%) scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -5%) scale(0.95);
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+/* Si quisieras que desaparezca con otra animación,
+   podrías añadir un setTimeout que cambie de clase o un 
+   keyframe inverso. Pero en el ejemplo, se oculta con setShowInitialTip(false). */
+
+/* Ajustamos el tooltip si quieres mayor z-index */
+.custom-tooltip {
+  position: absolute;
+  left: 50%;
+  top: 15px; 
+  transform: translateX(-50%);
+  background-color: #f8cf3b; /* Fondo amarillo */
+  color: #04080F;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeIn 0.2s forwards ease-out;
+  z-index: 2000000; /* valor muy alto para sobreponerlo */
+}
+
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
