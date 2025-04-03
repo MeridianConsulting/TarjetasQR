@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+
 import celImage from '../assets/img/cel.png';
 import buildingImage from '../assets/img/portaford.png';
 import websiteImage from '../assets/img/mundo.png';
@@ -7,8 +9,8 @@ import internationalImage from '../assets/img/mundo2.png';
 import emailImage2 from '../assets/img/email2.png';
 
 /**
- * Ejemplo de un pequeño modal genérico.
- * Este componente se muestra al hacer clic en el número de teléfono.
+ * Modal que se muestra al hacer clic en el número de teléfono.
+ * Va montado en el div#modal-root definido en public/index.html
  */
 const Modal = ({ isOpen, onClose, onSaveContact, phoneNumber }) => {
   if (!isOpen) return null;
@@ -17,18 +19,22 @@ const Modal = ({ isOpen, onClose, onSaveContact, phoneNumber }) => {
     onSaveContact(phoneNumber);
   };
 
-  return (
+  // Usamos createPortal para asegurarnos de que el modal
+  // esté fuera de cualquier contenedor que use transform.
+  return ReactDOM.createPortal(
     <div style={styles.backdrop}>
       <div style={styles.modal}>
         <h2>¿Deseas guardar este número?</h2>
         <p>{phoneNumber}</p>
         <div style={styles.buttonContainer}>
-        <div style={{ 
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '1rem',
-            marginTop: '1rem'
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '1rem',
+              marginTop: '1rem',
+            }}
+          >
             <button
               style={{
                 backgroundColor: '#63C9DB',
@@ -37,7 +43,7 @@ const Modal = ({ isOpen, onClose, onSaveContact, phoneNumber }) => {
                 padding: '0.8rem 1.4rem',
                 fontWeight: 'bold',
                 cursor: 'pointer',
-                color: '#fff'
+                color: '#fff',
               }}
               onClick={handleSaveContact}
             >
@@ -52,7 +58,7 @@ const Modal = ({ isOpen, onClose, onSaveContact, phoneNumber }) => {
                 padding: '0.8rem 1.4rem',
                 fontWeight: 'bold',
                 cursor: 'pointer',
-                color: '#333'
+                color: '#333',
               }}
               onClick={onClose}
             >
@@ -61,12 +67,14 @@ const Modal = ({ isOpen, onClose, onSaveContact, phoneNumber }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal-root') // <-- Aquí montamos el portal
   );
 };
 
 const ContactInfo = ({ userId }) => {
   const [contactData, setContactData] = useState({
+    nombre: '',
     email: '',
     numero_telefonico: '',
   });
@@ -77,26 +85,25 @@ const ContactInfo = ({ userId }) => {
   // Para la notificación de "copiado"
   const [copiedItem, setCopiedItem] = useState('');
 
-  // Estado para controlar el Modal
+  // Control del Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Almacenar temporalmente el número sobre el que se hizo clic
   const [selectedPhoneNumber, setSelectedPhoneNumber] = useState(null);
 
-  // Estados para los tooltips (teléfono principal e internacional)
+  // Tooltips
   const [showPhoneTooltip, setShowPhoneTooltip] = useState(false);
   const [showIntlPhoneTooltip, setShowIntlPhoneTooltip] = useState(false);
 
-  // Estado para el aviso inicial
+  // Aviso inicial
   const [showInitialTip, setShowInitialTip] = useState(false);
 
-  // Efecto para mostrar/ocultar el aviso inicial con un retardo
+  // Efecto para mostrar/ocultar el aviso inicial
   useEffect(() => {
-    // Mostrar aviso a los 2.5s (antes era 0.5s)
+    // Mostrar aviso a los 2.5s
     const timerShow = setTimeout(() => {
       setShowInitialTip(true);
     }, 2500);
 
-    // Ocultar aviso a los 7.5s (antes era 5.5s)
+    // Ocultar aviso a los 7.5s
     const timerHide = setTimeout(() => {
       setShowInitialTip(false);
     }, 7500);
@@ -107,10 +114,9 @@ const ContactInfo = ({ userId }) => {
     };
   }, []);
 
-  // Función para copiar al portapapeles (se usa en email, empresa, etc.)
+  // Función para copiar al portapapeles
   const copyToClipboard = (text, itemName) => {
     if (!text) return;
-
     navigator.clipboard
       .writeText(text)
       .then(() => {
@@ -120,20 +126,21 @@ const ContactInfo = ({ userId }) => {
       .catch((err) => console.error('Error al copiar:', err));
   };
 
-  // Lógica para abrir el Modal al hacer clic en el número de teléfono
+  // Abrir el modal al hacer clic en el número
   const handlePhoneClick = (phone) => {
     setSelectedPhoneNumber(phone);
     setIsModalOpen(true);
   };
 
-  // Lógica para guardar en contactos (descarga un archivo .vcf)
+  // Guardar en contactos (descarga .vcf)
   const saveContact = (phone) => {
     setIsModalOpen(false);
+    const nombreContacto = contactData.nombre || 'Contacto Meridian';
 
     const vCardData = `
 BEGIN:VCARD
 VERSION:3.0
-FN:Contacto Meridian
+FN:${nombreContacto}
 TEL;TYPE=CELL:${phone}
 END:VCARD
 `.trim();
@@ -143,15 +150,14 @@ END:VCARD
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'contacto.vcf'; // Nombre del archivo vCard
+    link.download = 'contacto.vcf';
     document.body.appendChild(link);
     link.click();
-
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
-  // useEffect para cargar datos del empleado
+  // Cargar datos del empleado
   useEffect(() => {
     const fetchContactData = async () => {
       try {
@@ -160,10 +166,10 @@ END:VCARD
         if (!response.ok) {
           throw new Error(`Error al obtener los datos: ${response.statusText}`);
         }
-
         const data = await response.json();
-        if (data.email && data.numero_telefonico) {
+        if (data.nombre && data.email && data.numero_telefonico) {
           setContactData({
+            nombre: data.nombre,
             email: data.email,
             numero_telefonico: data.numero_telefonico,
           });
@@ -176,18 +182,16 @@ END:VCARD
         setLoading(false);
       }
     };
-
     fetchContactData();
   }, [userId]);
 
-  // useEffect para determinar si mostrar el teléfono internacional
+  // Mostrar o no el teléfono internacional dependiendo de la URL
   useEffect(() => {
     const currentUrl = window.location.href;
     const matchingUrls = [
       'https://tarjetaqr.transporteszircon.com/ProfilePage/79613401',
       'https://tarjetaqr.transporteszircon.com/ProfilePage/79490148',
     ];
-
     if (matchingUrls.includes(currentUrl)) {
       setTelefonoInternacional('Teléfono Internacional U.S.: (1) 713 623 1113');
     } else {
@@ -198,7 +202,7 @@ END:VCARD
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  // Datos copiables estáticos
+  // Datos estáticos
   const staticContactInfo = {
     empresa: 'Meridian Consulting LTDA',
     sitioWeb: 'https://meridianltda.com',
@@ -208,7 +212,7 @@ END:VCARD
 
   return (
     <>
-      {/* Aviso inicial con animación */}
+      {/* Aviso inicial */}
       {showInitialTip && (
         <div className="initial-tip">
           Pulsa el número para guardar la información de contacto
@@ -216,7 +220,7 @@ END:VCARD
       )}
 
       <div className="contact-info">
-        {/* Notificación de "copiado al portapapeles" */}
+        {/* Notificación de "copiado" */}
         {copiedItem && (
           <div className="copied-notification">
             ¡{copiedItem} copiado al portapapeles!
@@ -231,7 +235,7 @@ END:VCARD
           phoneNumber={selectedPhoneNumber}
         />
 
-        {/* Teléfono principal, con tooltip y modal */}
+        {/* Teléfono principal */}
         <div
           className="contact-item clickable"
           role="button"
@@ -240,7 +244,7 @@ END:VCARD
           onClick={() => handlePhoneClick(contactData.numero_telefonico)}
           onMouseEnter={() => setShowPhoneTooltip(true)}
           onMouseLeave={() => setShowPhoneTooltip(false)}
-          onFocus={() => setShowPhoneTooltip(true)} // Para accesibilidad con tab
+          onFocus={() => setShowPhoneTooltip(true)}
           onBlur={() => setShowPhoneTooltip(false)}
         >
           <p>
@@ -277,9 +281,17 @@ END:VCARD
         {/* Sitio Web */}
         <div className="contact-item">
           <p>
-            <img src={internationalImage} alt="Sitio web" className="contact-icon" />
+            <img
+              src={internationalImage}
+              alt="Sitio web"
+              className="contact-icon"
+            />
             <span>
-              <a href={staticContactInfo.sitioWeb} target="_blank" rel="noopener noreferrer">
+              <a
+                href={staticContactInfo.sitioWeb}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 meridianltda.com
               </a>
             </span>
@@ -289,7 +301,9 @@ END:VCARD
         {/* Extensión */}
         <div
           className="contact-item clickable"
-          onClick={() => copyToClipboard(staticContactInfo.extension, 'Extensión')}
+          onClick={() =>
+            copyToClipboard(staticContactInfo.extension, 'Extensión')
+          }
         >
           <p>
             <img src={celImage} alt="Extensión" className="contact-icon" />
@@ -300,7 +314,9 @@ END:VCARD
         {/* Dirección */}
         <div
           className="contact-item clickable"
-          onClick={() => copyToClipboard(staticContactInfo.direccion, 'Dirección')}
+          onClick={() =>
+            copyToClipboard(staticContactInfo.direccion, 'Dirección')
+          }
         >
           <p>
             <img src={locationImage} alt="Ubicación" className="contact-icon" />
@@ -322,7 +338,11 @@ END:VCARD
             onBlur={() => setShowIntlPhoneTooltip(false)}
           >
             <p>
-              <img src={websiteImage} alt="Internacional" className="contact-icon" />
+              <img
+                src={websiteImage}
+                alt="Internacional"
+                className="contact-icon"
+              />
               <span className="phone-link">{telefonoInternacional}</span>
               {showIntlPhoneTooltip && (
                 <span className="custom-tooltip">Guardar contacto</span>
@@ -335,10 +355,7 @@ END:VCARD
   );
 };
 
-/** 
- * Estilos simples para el modal.
- * Se recomienda moverlos a un .css o .scss y usar clases en lugar de objetos.
- */
+// Estilos del modal (puedes moverlos a tu CSS si prefieres)
 const styles = {
   backdrop: {
     position: 'fixed',
@@ -350,7 +367,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 9999, // Mantener el modal por encima
+    zIndex: 9999,
   },
   modal: {
     backgroundColor: '#fff',
