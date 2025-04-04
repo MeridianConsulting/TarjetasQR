@@ -170,5 +170,76 @@ class AdminController {
 
         echo json_encode($result->fetch_all(MYSQLI_ASSOC));
     }
+
 }
+class ProfileController {
+    private $uploadDir;
+
+    public function __construct() {
+        $this->uploadDir = __DIR__ . '../../tarjetasqr/src/assets/img/personas/';
+    }
+
+    public function uploadProfileImage($userId) {
+        // Verificar que se haya enviado un archivo
+        if (!isset($_FILES['profileImage'])) {
+            http_response_code(400);
+            echo json_encode(["success" => false, "message" => "No se envió ninguna imagen."]);
+            return;
+        }
+        
+        $file = $_FILES['profileImage'];
+        // Validar errores de carga
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al subir la imagen."]);
+            return;
+        }
+        
+        // Validar el tipo de archivo (por ejemplo, jpg y png)
+        $allowedTypes = ['image/jpeg' => '.jpg', 'image/png' => '.png'];
+        if (!array_key_exists($file['type'], $allowedTypes)) {
+            http_response_code(400);
+            echo json_encode(["success" => false, "message" => "Tipo de imagen no permitido."]);
+            return;
+        }
+        
+        // Generar el nombre del archivo basado en el userId y la extensión
+        $extension = $allowedTypes[$file['type']];
+        $fileName = $userId . $extension;
+        $destination = $this->uploadDir . $fileName;
+        
+        // Mover el archivo a la carpeta de destino
+        if (move_uploaded_file($file['tmp_name'], $destination)) {
+            http_response_code(200);
+            echo json_encode(["success" => true, "message" => "Imagen subida exitosamente.", "fileName" => $fileName]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Error al guardar la imagen."]);
+        }
+    }
+
+    public function deleteProfileImage($userId) {
+        // Suponemos que la imagen puede ser .jpg o .png
+        $possibleExtensions = ['.jpg', '.png'];
+        $found = false;
+        foreach ($possibleExtensions as $ext) {
+            $filePath = $this->uploadDir . $userId . $ext;
+            if (file_exists($filePath)) {
+                if (unlink($filePath)) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        
+        if ($found) {
+            http_response_code(200);
+            echo json_encode(["success" => true, "message" => "Imagen eliminada exitosamente."]);
+        } else {
+            http_response_code(404);
+            echo json_encode(["success" => false, "message" => "Imagen no encontrada."]);
+        }
+    }
+}
+
 ?>

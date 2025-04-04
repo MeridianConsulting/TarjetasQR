@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/controllers/adminController.php';
 require_once __DIR__ . '/controllers/userController.php';
+require_once __DIR__ . '/controllers/profileController.php'; // Se incluye el controlador para la gestión de imágenes
 require_once __DIR__ . '/middleware/cors.php';
 
 header("Content-Type: application/json");
@@ -21,7 +22,7 @@ error_log("Method: $method, Path: $path");
 function handleRequest($method, $path) {
     $path = trim($path, "/");
 
-    // Rutas para empleados
+    // Rutas para empleados y administración
     $controller = null;
 
     if ($path === "employees" && $method === "POST") {
@@ -52,6 +53,18 @@ function handleRequest($method, $path) {
         parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $queryParams);
         $controller = new AdminController();
         $controller->searchEmployeesByName($queryParams);
+
+    } elseif (preg_match("#^admin/employees/(\d+)/upload-image$#", $path, $matches) && $method === "POST") {
+        // Ruta para subir imagen de perfil
+        $userId = $matches[1];
+        $controller = new ProfileController();
+        $controller->uploadProfileImage($userId);
+
+    } elseif (preg_match("#^admin/employees/(\d+)/delete-image$#", $path, $matches) && $method === "DELETE") {
+        // Ruta para eliminar imagen de perfil
+        $userId = $matches[1];
+        $controller = new ProfileController();
+        $controller->deleteProfileImage($userId);
 
     } elseif (preg_match("#^admin/employees/(\d+)$#", $path, $matches) && $method === "PUT") {
         $id = $matches[1];
