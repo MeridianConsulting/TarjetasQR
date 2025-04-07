@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import extensionImage from '../assets/img/x.png'; // Twitter / X
-import facebookImage from '../assets/img/facebook.png';
 import linkedinImage from '../assets/img/in.png';
 import instagramImage from '../assets/img/ig.png';
 import tiktokImage from '../assets/img/tiktok.png'; // TikTok icon

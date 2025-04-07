@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/controllers/adminController.php';
 require_once __DIR__ . '/controllers/userController.php';
-require_once __DIR__ . '/controllers/profileController.php'; // Se incluye el controlador para la gestión de imágenes
 require_once __DIR__ . '/middleware/cors.php';
 
 header("Content-Type: application/json");
@@ -9,7 +8,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
 // Base path
-define('BASE_PATH', '/tarjetasqr/server-php');
+define('BASE_PATH', '/server-php');
 
 // Captura el método y la ruta de la solicitud
 $method = $_SERVER['REQUEST_METHOD'];
@@ -21,8 +20,6 @@ error_log("Method: $method, Path: $path");
 // Manejador de rutas
 function handleRequest($method, $path) {
     $path = trim($path, "/");
-
-    // Rutas para empleados y administración
     $controller = null;
 
     if ($path === "employees" && $method === "POST") {
@@ -54,17 +51,17 @@ function handleRequest($method, $path) {
         $controller = new AdminController();
         $controller->searchEmployeesByName($queryParams);
 
-    } elseif (preg_match("#^admin/employees/(\d+)/upload-image$#", $path, $matches) && $method === "POST") {
-        // Ruta para subir imagen de perfil
+    // Ruta para actualizar la URL de imagen de perfil
+    } elseif (preg_match("#^admin/employees/(\d+)/update-image-url$#", $path, $matches) && $method === "PUT") {
         $userId = $matches[1];
         $controller = new ProfileController();
-        $controller->uploadProfileImage($userId);
+        $controller->updateProfileImageUrl($userId);
 
-    } elseif (preg_match("#^admin/employees/(\d+)/delete-image$#", $path, $matches) && $method === "DELETE") {
-        // Ruta para eliminar imagen de perfil
+    // Ruta para eliminar la URL de imagen de perfil
+    } elseif (preg_match("#^admin/employees/(\d+)/delete-image-url$#", $path, $matches) && $method === "DELETE") {
         $userId = $matches[1];
         $controller = new ProfileController();
-        $controller->deleteProfileImage($userId);
+        $controller->deleteProfileImageUrl($userId);
 
     } elseif (preg_match("#^admin/employees/(\d+)$#", $path, $matches) && $method === "PUT") {
         $id = $matches[1];

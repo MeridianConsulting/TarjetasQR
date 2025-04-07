@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import ContactInfo from '../components/ContactInfo';
@@ -15,12 +15,9 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const apiUrl = process.env.REACT_APP_API_BASE_URL;
-        const response = await fetch(
-          `${apiUrl}/employees/${id}`,
-          { headers: { "Content-Type": "application/json" } }
-        );
-
-        if (!response.ok) throw new Error('Error al obtener datos');
+        // Se elimina el header para la solicitud GET
+        const response = await fetch(`${apiUrl}/employees/${id}`);
+        if (!response.ok) throw new Error(`Error al obtener datos: ${response.statusText}`);
         
         const data = await response.json();
         if (data.nombre) {

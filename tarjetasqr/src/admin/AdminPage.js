@@ -1,106 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import '../assets/css/admin.css';
 
-// Componente para gestionar la imagen de perfil (subida y eliminación)
-const ProfileImageManager = ({ userId, apiUrl, onUploadSuccess, onDeleteSuccess }) => {
-  const [uploading, setUploading] = useState(false);
+// Componente para gestionar la URL de la imagen de perfil (actualización y eliminación)
+const ProfileImageManager = ({ userId, apiUrl, currentImageUrl, onUrlUpdate }) => {
+  const [imageUrl, setImageUrl] = useState(currentImageUrl || '');
+  const [updating, setUpdating] = useState(false);
   const [error, setError] = useState('');
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleUrlChange = (e) => {
+    setImageUrl(e.target.value);
+  };
 
-    const formData = new FormData();
-    formData.append('profileImage', file);
-
-    setUploading(true);
+  // Función para actualizar la URL de la imagen en el servidor
+  const handleUpdateImage = async () => {
+    setUpdating(true);
     setError('');
     try {
-      // Llamada al endpoint de subida de imagen
-      const response = await fetch(`${apiUrl}/admin/employees/${userId}/upload-image`, {
-        method: 'POST',
-        body: formData,
+      const response = await fetch(`${apiUrl}/admin/employees/${userId}/update-image-url`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageUrl }),
       });
       const result = await response.json();
-
       if (!response.ok) {
-        throw new Error(result.message || 'Error al subir imagen');
+        throw new Error(result.message || 'Error al actualizar la URL de la imagen');
       }
-      // Notificar al componente padre que la subida fue exitosa
-      onUploadSuccess && onUploadSuccess(result.fileName);
+      onUrlUpdate && onUrlUpdate(imageUrl);
     } catch (err) {
       setError(err.message);
     } finally {
-      setUploading(false);
+      setUpdating(false);
     }
   };
 
+  // Función para eliminar la URL de la imagen asociada
   const handleDeleteImage = async () => {
+    setUpdating(true);
     setError('');
-    setUploading(true);
     try {
-      // Llamada al endpoint de eliminación de imagen
-      const response = await fetch(`${apiUrl}/admin/employees/${userId}/delete-image`, {
+      const response = await fetch(`${apiUrl}/admin/employees/${userId}/delete-image-url`, {
         method: 'DELETE',
       });
       const result = await response.json();
-
       if (!response.ok) {
-        throw new Error(result.message || 'Error al eliminar imagen');
+        throw new Error(result.message || 'Error al eliminar la URL de la imagen');
       }
-      // Notificar al componente padre que la eliminación fue exitosa
-      onDeleteSuccess && onDeleteSuccess();
+      setImageUrl('');
+      onUrlUpdate && onUrlUpdate('');
     } catch (err) {
       setError(err.message);
     } finally {
-      setUploading(false);
+      setUpdating(false);
     }
   };
 
   return (
     <div className="profile-image-manager">
-      <h3>Gestión de Imagen de Perfil</h3>
+      <h3>Gestión de URL de Imagen de Perfil</h3>
       <input
-        type="file"
-        accept="image/jpeg, image/png"
-        onChange={handleFileChange}
-        disabled={uploading}
-        className="profile-image-input"
+        type="text"
+        placeholder="Ingresa URL de imagen"
+        value={imageUrl}
+        onChange={handleUrlChange}
+        disabled={updating}
+        className="profile-image-url-input"
       />
       <button
+        onClick={handleUpdateImage}
+        disabled={updating}
+        className="profile-image-update-btn"
+      >
+        Actualizar URL
+      </button>
+      <button
         onClick={handleDeleteImage}
-        disabled={uploading}
+        disabled={updating}
         className="profile-image-delete-btn"
       >
-        Eliminar Imagen
+        Eliminar URL
       </button>
-      {uploading && <p>Procesando...</p>}
+      {updating && <p>Procesando...</p>}
       {error && <p className="profile-image-error">Error: {error}</p>}
     </div>
-
   );
 };
-
-// Función para obtener la ruta de la imagen del empleado
-function getProfileImagePath(userId) {
-  try {
-    // Primero intenta con .jpg
-    return require(`../assets/img/personas/${userId}.jpg`);
-  } catch {
-    try {
-      // Si no existe .jpg, intenta con .png
-      return require(`../assets/img/personas/${userId}.png`);
-    } catch {
-      // Si no existe ninguna, fallback a un ícono genérico
-      return require(`../assets/img/profile.png`);
-    }
-  }
-}
 
 const AdminPage = ({ onLogout }) => {
   const [empleados, setEmpleados] = useState([]);
   const [editEmpleado, setEditEmpleado] = useState(null);
   const [newEmpleado, setNewEmpleado] = useState({
+    Id: '',                // Agregamos el campo Id para almacenar la Cédula
     nombre: '',
     cargo: '',
     numero_telefonico: '',
@@ -108,10 +99,11 @@ const AdminPage = ({ onLogout }) => {
     compania: '',
     telefono_empresa: '',
     telefono_internacional: '',
+    imageUrl: '',
   });
   const [searchTerm, setSearchTerm] = useState('');
 
-  const apiUrl = process.env.REACT_APP_API_BASE_URL; // Variable de entorno para la URL base
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
   const fetchEmpleados = async () => {
     try {
@@ -148,6 +140,7 @@ const AdminPage = ({ onLogout }) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        // Enviamos todos los campos, incluyendo Id
         body: JSON.stringify(newEmpleado),
       });
       if (!response.ok) {
@@ -156,7 +149,9 @@ const AdminPage = ({ onLogout }) => {
       }
       const data = await response.json();
       setEmpleados([...empleados, data]);
+      // Limpiamos el formulario
       setNewEmpleado({
+        Id: '',
         nombre: '',
         cargo: '',
         numero_telefonico: '',
@@ -164,8 +159,9 @@ const AdminPage = ({ onLogout }) => {
         compania: '',
         telefono_empresa: '',
         telefono_internacional: '',
+        imageUrl: '',
       });
-      fetchEmpleados(); // Actualizar la lista de empleados
+      fetchEmpleados();
     } catch (error) {
       console.error('Error al crear empleado:', error);
     }
@@ -218,9 +214,12 @@ const AdminPage = ({ onLogout }) => {
     setEditEmpleado(null);
   };
 
-  // Callback para refrescar la lista luego de actualizar la imagen
-  const handleImageUpdate = () => {
-    fetchEmpleados();
+  // Callback para refrescar la lista luego de actualizar la URL de la imagen
+  const handleImageUpdate = (newUrl) => {
+    if (editEmpleado) {
+      setEditEmpleado({ ...editEmpleado, imageUrl: newUrl });
+      fetchEmpleados();
+    }
   };
 
   const filteredEmpleados = empleados.filter((empleado) => {
@@ -300,17 +299,20 @@ const AdminPage = ({ onLogout }) => {
             {/* Mostrar imagen de perfil actual */}
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
               <img
-                src={getProfileImagePath(editEmpleado.Id)}
+                src={
+                  editEmpleado.imageUrl ||
+                  require(`../assets/img/profile.png`)
+                }
                 alt="Imagen de perfil"
                 style={{ width: '100px', height: '100px', borderRadius: '50%' }}
               />
             </div>
-            {/* Componente para gestionar la imagen */}
+            {/* Componente para gestionar la URL de la imagen */}
             <ProfileImageManager
               userId={editEmpleado.Id}
               apiUrl={apiUrl}
-              onUploadSuccess={handleImageUpdate}
-              onDeleteSuccess={handleImageUpdate}
+              currentImageUrl={editEmpleado.imageUrl}
+              onUrlUpdate={handleImageUpdate}
             />
             <input
               className="admin-page__input"
@@ -388,6 +390,16 @@ const AdminPage = ({ onLogout }) => {
 
       <h2 className="admin-page__subtitle">Añadir Nuevo Empleado</h2>
       <form className="admin-page__form" onSubmit={handleCreateEmpleado}>
+        {/* Campo para la Cédula (Id) */}
+        <input
+          className="admin-page__input"
+          type="text"
+          name="Id"
+          placeholder="Cédula"
+          value={newEmpleado.Id}
+          onChange={handleInputChange}
+          required
+        />
         <input
           className="admin-page__input"
           type="text"
@@ -446,6 +458,14 @@ const AdminPage = ({ onLogout }) => {
           name="telefono_internacional"
           placeholder="Teléfono Internacional"
           value={newEmpleado.telefono_internacional}
+          onChange={handleInputChange}
+        />
+        <input
+          className="admin-page__input"
+          type="text"
+          name="imageUrl"
+          placeholder="URL de la Imagen (opcional)"
+          value={newEmpleado.imageUrl}
           onChange={handleInputChange}
         />
         <button className="admin-page__button admin-page__button--submit" type="submit">
