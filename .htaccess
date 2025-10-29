@@ -1,0 +1,21 @@
+# Habilitar motor de reescritura
+RewriteEngine On
+
+# Configuración básica
+Options -Indexes
+DirectoryIndex index.html index.php
+
+# Proteger archivos sensibles
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Configuración UTF-8
+AddDefaultCharset UTF-8
+
+# Habilitar compresión
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
+
