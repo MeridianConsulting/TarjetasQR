@@ -18,7 +18,7 @@ const Login = ({ onLogin }) => {
     setError("");
 
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
       const response = await fetch(`${apiUrl}/admin/login`,{
           method: "POST",
           headers: {

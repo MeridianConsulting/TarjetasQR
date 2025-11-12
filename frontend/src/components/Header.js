@@ -3,21 +3,14 @@ import { ClipLoader } from "react-spinners";
 import logoImage from "../assets/img/Logo.png";
 import emailImage from "../assets/img/email.png";
 import celImage2 from "../assets/img/cel2.png";
+import profileDefault from "../assets/img/profile.png";
 
-// Función para intentar obtener la imagen del perfil desde la carpeta local
-function getLocalProfileImage(userId) {
-  try {
-    // Intenta cargar la imagen con extensión .jpg
-    return require(`../assets/img/personas/${userId}.jpg`);
-  } catch {
-    try {
-      // Si falla, intenta con .png
-      return require(`../assets/img/personas/${userId}.png`);
-    } catch {
-      // Si no se encuentra ninguna, retorna la imagen por defecto
-      return require(`../assets/img/profile.png`);
-    }
-  }
+// Función para obtener la imagen del perfil desde el backend o usar imagen por defecto
+function getProfileImageUrl(userId) {
+  const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
+  // Intentamos cargar la imagen desde el backend
+  // Si no existe, el backend debería manejar el error o podemos usar una imagen por defecto
+  return `${apiUrl}/uploads/${userId}.jpg`;
 }
 
 const Header = ({ userId }) => {
@@ -30,13 +23,14 @@ const Header = ({ userId }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [imageError, setImageError] = useState(false);
 
   // Carga los datos del usuario, incluyendo el campo imageUrl
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL;
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
         const response = await fetch(`${apiUrl}/employees/${userId}`);
         if (!response.ok) {
           throw new Error(`Error al obtener los datos: ${response.statusText}`);
@@ -63,11 +57,17 @@ const Header = ({ userId }) => {
     fetchUserData();
   }, [userId]);
 
-  // Si existe una imagen en la base de datos y no está vacía, se usa; de lo contrario se intenta cargar la imagen local
-  const profileImageSrc =
-    userData.imageUrl && userData.imageUrl.trim() !== ""
+  // Si existe una imagen en la base de datos y no está vacía, se usa; de lo contrario se intenta cargar desde el backend
+  const profileImageSrc = imageError 
+    ? profileDefault
+    : userData.imageUrl && userData.imageUrl.trim() !== ""
       ? userData.imageUrl
-      : getLocalProfileImage(userId);
+      : getProfileImageUrl(userId);
+
+  // Manejador de error de carga de imagen
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
   // Funciones para realizar llamada o enviar correo
   const handleCall = () => {
@@ -108,7 +108,12 @@ const Header = ({ userId }) => {
         <header className="header">
           <div className="header-content">
             <div className="img-container">
-              <img src={profileImageSrc} alt="Profile" className="profile-img" />
+              <img 
+                src={profileImageSrc} 
+                alt="Profile" 
+                className="profile-img"
+                onError={handleImageError}
+              />
             </div>
             <h2>{userData.nombre}</h2>
             <p>{userData.cargo}</p>

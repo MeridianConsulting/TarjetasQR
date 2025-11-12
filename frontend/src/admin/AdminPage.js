@@ -103,7 +103,7 @@ const AdminPage = ({ onLogout }) => {
   });
   const [searchTerm, setSearchTerm] = useState('');
 
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+  const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
 
   const fetchEmpleados = async () => {
     try {

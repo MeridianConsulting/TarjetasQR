@@ -161,7 +161,7 @@ END:VCARD
   useEffect(() => {
     const fetchContactData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL;
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
         const response = await fetch(`${apiUrl}/employees/${userId}`);
         if (!response.ok) {
           throw new Error(`Error al obtener los datos: ${response.statusText}`);
