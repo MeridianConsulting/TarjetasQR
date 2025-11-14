@@ -4,14 +4,25 @@ import Header from '../components/Header';
 import ContactInfo from '../components/ContactInfo';
 import SocialMedia from '../components/SocialMedia';
 import DownloadVCard from '../components/DownloadVCard';
+import { decodeId } from '../utils/encodeId';
 import '../assets/css/styles.css';
 
 const ProfilePage = () => {
-  const { id } = useParams();
+  const { id: encodedId } = useParams();
   const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
+  
+  // Decodificar el ID de la URL
+  const id = decodeId(encodedId);
 
   // Nueva lógica para obtener datos del usuario
   useEffect(() => {
+    if (!id) {
+      setError('ID inválido o no se pudo decodificar');
+      console.error('ID inválido o no se pudo decodificar. ID recibido:', encodedId);
+      return;
+    }
+
     const fetchUserData = async () => {
       try {
         const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
@@ -25,11 +36,23 @@ const ProfilePage = () => {
         }
       } catch (error) {
         console.error('Error:', error);
+        setError('Error al cargar los datos del empleado');
       }
     };
 
     fetchUserData();
-  }, [id]);
+  }, [id, encodedId]);
+
+  // Mostrar error si no hay ID válido
+  if (error && !id) {
+    return (
+      <div className="page-container" style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Error</h2>
+        <p>{error}</p>
+        <p>Por favor, verifica que la URL sea correcta.</p>
+      </div>
+    );
+  }
 
   return (
     <>

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import ProfilePage from './pages/ProfilePage';
 import Login from './components/Login';
 import AdminPage from './admin/AdminPage';
+import { encodeId } from './utils/encodeId';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const ProtectedRoute = ({ element, authenticated }) => {
@@ -40,7 +41,7 @@ function App() {
           />
           <Route
             path="/"
-            element={<Navigate to="/ProfilePage/79613401" />}
+            element={<Navigate to={`/ProfilePage/${encodeId('79613401')}`} />}
           />
         </Routes>
       </div>

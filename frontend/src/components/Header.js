@@ -36,13 +36,13 @@ const Header = ({ userId }) => {
           throw new Error(`Error al obtener los datos: ${response.statusText}`);
         }
         const data = await response.json();
-        if (data.nombre && data.cargo && data.email && data.numero_telefonico) {
+        if (data.nombre) {
           setUserData({
-            nombre: data.nombre,
-            cargo: data.cargo,
-            email: data.email,
-            numero_telefonico: data.numero_telefonico,
-            imageUrl: data.imageUrl // Se guarda la URL de imagen de la base de datos
+            nombre: data.nombre || '',
+            cargo: data.cargo || '',
+            email: data.email || '',
+            numero_telefonico: data.numero_telefonico || '',
+            imageUrl: data.imageUrl || '' // Se guarda la URL de imagen de la base de datos
           });
         } else {
           throw new Error("Datos incompletos del empleado");
@@ -116,17 +116,21 @@ const Header = ({ userId }) => {
               />
             </div>
             <h2>{userData.nombre}</h2>
-            <p>{userData.cargo}</p>
+            {userData.cargo && <p>{userData.cargo}</p>}
             <div className="header-buttons-container">
               <div className="header-buttons">
-                <button className="call-button" onClick={handleCall}>
-                  <img src={celImage2} alt="Llamar" className="contact-header-icon" />
-                  Llamar
-                </button>
-                <button className="email-button" onClick={handleEmail}>
-                  <img src={emailImage} alt="Enviar Email" className="contact-header-icon" />
-                  Correo
-                </button>
+                {userData.numero_telefonico && (
+                  <button className="call-button" onClick={handleCall}>
+                    <img src={celImage2} alt="Llamar" className="contact-header-icon" />
+                    Llamar
+                  </button>
+                )}
+                {userData.email && (
+                  <button className="email-button" onClick={handleEmail}>
+                    <img src={emailImage} alt="Enviar Email" className="contact-header-icon" />
+                    Correo
+                  </button>
+                )}
               </div>
             </div>
           </div>

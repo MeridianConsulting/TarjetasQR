@@ -39,7 +39,7 @@ const SocialMedia = () => {
         </a>
 
         {/* Instagram */}
-        <a href="https://www.instagram.com/meridian_consultingltda/ " target="_blank" rel="noopener noreferrer">
+        <a href="https://www.instagram.com/meridian.consulting/ " target="_blank" rel="noopener noreferrer">
           <img className="social-icon" src={instagramImage} alt="Instagram" />
         </a>
 

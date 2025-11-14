@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { encodeId } from '../utils/encodeId';
 
 import celImage from '../assets/img/cel.png';
 import buildingImage from '../assets/img/portaford.png';
@@ -167,11 +168,11 @@ END:VCARD
           throw new Error(`Error al obtener los datos: ${response.statusText}`);
         }
         const data = await response.json();
-        if (data.nombre && data.email && data.numero_telefonico) {
+        if (data.nombre) {
           setContactData({
-            nombre: data.nombre,
-            email: data.email,
-            numero_telefonico: data.numero_telefonico,
+            nombre: data.nombre || '',
+            email: data.email || '',
+            numero_telefonico: data.numero_telefonico || '',
           });
         } else {
           throw new Error('Datos incompletos del empleado');
@@ -188,10 +189,21 @@ END:VCARD
   // Mostrar o no el teléfono internacional dependiendo de la URL
   useEffect(() => {
     const currentUrl = window.location.href;
-    const matchingUrls = [
-      'https://tarjetaqr.transporteszircon.com/ProfilePage/79613401',
-      'https://tarjetaqr.transporteszircon.com/ProfilePage/79490148',
+    // Usar IDs codificados para las URLs - soportar múltiples dominios
+    const baseUrls = [
+      'https://tarjetaqr.transporteszircon.com/ProfilePage/',
+      'http://carnet.meridian.com/ProfilePage/',
+      'https://carnet.meridian.com/ProfilePage/',
     ];
+    
+    const matchingUrls = [];
+    baseUrls.forEach(baseUrl => {
+      matchingUrls.push(
+        `${baseUrl}${encodeId('79613401')}`,
+        `${baseUrl}${encodeId('79490148')}`
+      );
+    });
+    
     if (matchingUrls.includes(currentUrl)) {
       setTelefonoInternacional('Teléfono Internacional U.S.: (1) 713 623 1113');
     } else {
@@ -207,7 +219,7 @@ END:VCARD
     empresa: 'Meridian Consulting LTDA',
     sitioWeb: 'https://meridianltda.com',
     extension: '(601) 7469090',
-    direccion: 'Calle 67 No. 7 – 94 Piso 20 Bogota - Colombia',
+    direccion: 'Cl. 67 #7 - 35, Bogotá, Colombia',
   };
 
   return (
@@ -236,36 +248,40 @@ END:VCARD
         />
 
         {/* Teléfono principal */}
-        <div
-          className="contact-item clickable"
-          role="button"
-          aria-label="Guardar este número en tus contactos"
-          tabIndex={0}
-          onClick={() => handlePhoneClick(contactData.numero_telefonico)}
-          onMouseEnter={() => setShowPhoneTooltip(true)}
-          onMouseLeave={() => setShowPhoneTooltip(false)}
-          onFocus={() => setShowPhoneTooltip(true)}
-          onBlur={() => setShowPhoneTooltip(false)}
-        >
-          <p>
-            <img src={celImage} alt="Teléfono" className="contact-icon" />
-            <span className="phone-link">{contactData.numero_telefonico}</span>
-            {showPhoneTooltip && (
-              <span className="custom-tooltip">Guardar contacto</span>
-            )}
-          </p>
-        </div>
+        {contactData.numero_telefonico && (
+          <div
+            className="contact-item clickable"
+            role="button"
+            aria-label="Guardar este número en tus contactos"
+            tabIndex={0}
+            onClick={() => handlePhoneClick(contactData.numero_telefonico)}
+            onMouseEnter={() => setShowPhoneTooltip(true)}
+            onMouseLeave={() => setShowPhoneTooltip(false)}
+            onFocus={() => setShowPhoneTooltip(true)}
+            onBlur={() => setShowPhoneTooltip(false)}
+          >
+            <p>
+              <img src={celImage} alt="Teléfono" className="contact-icon" />
+              <span className="phone-link">{contactData.numero_telefonico}</span>
+              {showPhoneTooltip && (
+                <span className="custom-tooltip">Guardar contacto</span>
+              )}
+            </p>
+          </div>
+        )}
 
         {/* Email */}
-        <div
-          className="contact-item clickable"
-          onClick={() => copyToClipboard(contactData.email, 'Email')}
-        >
-          <p>
-            <img src={emailImage2} alt="Email" className="contact-icon" />
-            <span>{contactData.email}</span>
-          </p>
-        </div>
+        {contactData.email && (
+          <div
+            className="contact-item clickable"
+            onClick={() => copyToClipboard(contactData.email, 'Email')}
+          >
+            <p>
+              <img src={emailImage2} alt="Email" className="contact-icon" />
+              <span>{contactData.email}</span>
+            </p>
+          </div>
+        )}
 
         {/* Empresa */}
         <div
