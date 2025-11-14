@@ -69,7 +69,13 @@ function handleRequest($method, $path) {
 
     } elseif (preg_match("#^employees/(\d+)$#", $path, $matches) && $method === "GET") {
         header("Content-Type: application/json");
-        $id = $matches[1];
+        // Validación adicional: solo aceptar IDs numéricos
+        $id = filter_var($matches[1], FILTER_VALIDATE_INT);
+        if ($id === false || $id <= 0) {
+            http_response_code(400);
+            echo json_encode(["error" => "ID inválido"]);
+            return;
+        }
         $controller = new UserController();
         $controller->obtenerEmpleadoPorId($id);
 
@@ -121,6 +127,17 @@ function handleRequest($method, $path) {
         $id = $matches[1];
         $controller = new AdminController();
         $controller->deleteEmployee($id);
+
+    } elseif ($path === "user/login" && $method === "POST") {
+        header("Content-Type: application/json");
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data) {
+            http_response_code(400);
+            echo json_encode(["success" => false, "message" => "Datos inválidos"]);
+            return;
+        }
+        $controller = new UserController();
+        $controller->validateUserLogin($data);
 
     } elseif ($path === "admin/login" && $method === "POST") {
         header("Content-Type: application/json");

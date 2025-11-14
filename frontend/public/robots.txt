@@ -1,3 +1,10 @@
-# https://www.robotstxt.org/robotstxt.html
+# Bloquear indexación de todos los carnets virtuales
 User-agent: *
-Disallow:
+Disallow: /ProfilePage/
+
+# Permitir acceso solo a la página principal y login
+Allow: /user/login
+Allow: /admin/login
+
+# Bloquear todo lo demás por defecto
+Disallow: /

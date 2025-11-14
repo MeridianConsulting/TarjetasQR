@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100..900&display=swap');
+
+/* Colores corporativos */
+:root {
+  --primary-blue: #33619D;
+  --dark-blue: #295281;
+  --light-blue: #63C9DB;
+  --cyan: #5bbaca;
+  --yellow: #f8cf3b;
+  --text-dark: #04080F;
+  --text-light: #FCF7FF;
+  --white: #ffffff;
+  --gray-light: #f9f9f9;
+  --gray-medium: #f0f0ef;
+  --error-red: #e74c3c;
+  --success-green: #27ae60;
+}
+
+/* Reset para eliminar márgenes y padding cuando se muestra el login */
+body.user-login-page,
+html.user-login-page {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.user-login-page {
+  display: block !important;
+  justify-content: unset !important;
+  background-color: transparent !important;
+}
+
+.user-login-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 50%, var(--light-blue) 100%);
+  background-attachment: fixed;
+  background-size: cover;
+  padding: 20px;
+  font-family: "Libre Franklin", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  z-index: 1;
+}
+
+.user-login-card {
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 50px 40px;
+  width: 100%;
+  max-width: 450px;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.user-login-logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.user-login-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.user-login-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.user-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.user-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-input-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-input-label i {
+  color: var(--primary-blue);
+  font-size: 16px;
+}
+
+.user-input-field {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-family: "Libre Franklin", sans-serif;
+  background-color: var(--white);
+  color: var(--text-dark);
+}
+
+.user-input-field:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(51, 97, 157, 0.1);
+}
+
+.user-input-field::placeholder {
+  color: #999;
+}
+
+.user-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-password-wrapper .user-input-field {
+  padding-right: 50px;
+}
+
+.user-toggle-password {
+  position: absolute;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  font-size: 18px;
+}
+
+.user-toggle-password:hover {
+  color: var(--primary-blue);
+}
+
+.user-toggle-password:focus {
+  outline: none;
+}
+
+.user-error-message {
+  background-color: #fee;
+  border: 2px solid var(--error-red);
+  color: var(--error-red);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.user-error-message i {
+  font-size: 16px;
+}
+
+.user-login-button {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Libre Franklin", sans-serif;
+  box-shadow: 0 4px 15px rgba(51, 97, 157, 0.3);
+  margin-top: 10px;
+}
+
+.user-login-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(51, 97, 157, 0.4);
+}
+
+.user-login-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.user-login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.user-login-button i {
+  font-size: 16px;
+}
+
+.user-login-footer {
+  margin-top: 30px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.user-login-footer p {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .user-login-card {
+    padding: 30px 25px;
+    border-radius: 15px;
+  }
+
+  .user-login-logo {
+    width: 150px;
+  }
+
+  .user-login-title {
+    font-size: 24px;
+  }
+
+  .user-input-field {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  .user-login-button {
+    padding: 14px;
+    font-size: 16px;
+  }
+}
+
+/* Animación de carga */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+

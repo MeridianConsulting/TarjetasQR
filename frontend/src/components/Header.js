@@ -27,13 +27,18 @@ const Header = ({ userId }) => {
 
   // Carga los datos del usuario, incluyendo el campo imageUrl
   useEffect(() => {
+    if (!userId) return;
+    
     const fetchUserData = async () => {
       setLoading(true);
       try {
         const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
         const response = await fetch(`${apiUrl}/employees/${userId}`);
         if (!response.ok) {
-          throw new Error(`Error al obtener los datos: ${response.statusText}`);
+          if (response.status === 429) {
+            throw new Error('Demasiadas solicitudes. Por favor, espere un momento.');
+          }
+          throw new Error(`Error al obtener los datos`);
         }
         const data = await response.json();
         if (data.nombre) {
@@ -48,7 +53,8 @@ const Header = ({ userId }) => {
           throw new Error("Datos incompletos del empleado");
         }
       } catch (error) {
-        setError(error.message || "Error desconocido");
+        // No exponer detalles del error por seguridad
+        setError("Error al cargar los datos");
       } finally {
         setLoading(false);
       }

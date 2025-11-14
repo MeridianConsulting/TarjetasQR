@@ -54,7 +54,7 @@ export const decodeId = (encodedId) => {
     
     return null;
   } catch (error) {
-    console.error('Error al decodificar ID:', error);
+    // No exponer errores de decodificación por seguridad
     // Si falla la decodificación, intentar usar el ID original (retrocompatibilidad)
     return encodedId;
   }

@@ -15,11 +15,41 @@ const ProfilePage = () => {
   // Decodificar el ID de la URL
   const id = decodeId(encodedId);
 
+  // Agregar meta tags para evitar indexación en buscadores
+  useEffect(() => {
+    // Crear o actualizar meta tags
+    const metaRobots = document.querySelector('meta[name="robots"]');
+    if (metaRobots) {
+      metaRobots.setAttribute('content', 'noindex, nofollow, noarchive, nosnippet');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'robots';
+      meta.content = 'noindex, nofollow, noarchive, nosnippet';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    }
+
+    // Agregar meta tag para Google específicamente
+    const metaGooglebot = document.querySelector('meta[name="googlebot"]');
+    if (metaGooglebot) {
+      metaGooglebot.setAttribute('content', 'noindex, nofollow');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'googlebot';
+      meta.content = 'noindex, nofollow';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    }
+
+    // Actualizar título dinámicamente
+    if (userData?.nombre) {
+      document.title = `Carnet Virtual - ${userData.nombre}`;
+    }
+  }, [userData]);
+
   // Nueva lógica para obtener datos del usuario
   useEffect(() => {
     if (!id) {
       setError('ID inválido o no se pudo decodificar');
-      console.error('ID inválido o no se pudo decodificar. ID recibido:', encodedId);
+      // No exponer el ID en logs por seguridad
       return;
     }
 
@@ -28,14 +58,19 @@ const ProfilePage = () => {
         const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
         // Se elimina el header para la solicitud GET
         const response = await fetch(`${apiUrl}/employees/${id}`);
-        if (!response.ok) throw new Error(`Error al obtener datos: ${response.statusText}`);
+        if (!response.ok) {
+          if (response.status === 429) {
+            throw new Error('Demasiadas solicitudes. Por favor, espere un momento.');
+          }
+          throw new Error(`Error al obtener datos: ${response.statusText}`);
+        }
         
         const data = await response.json();
         if (data.nombre) {
           setUserData(data);
         }
       } catch (error) {
-        console.error('Error:', error);
+        // No exponer detalles del error que puedan revelar información sensible
         setError('Error al cargar los datos del empleado');
       }
     };
