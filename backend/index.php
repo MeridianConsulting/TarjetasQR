@@ -69,6 +69,10 @@ function handleRequest($method, $path) {
             $allowedOrigins = [
                 'http://carnet.meridian.com',
                 'https://carnet.meridian.com',
+                'http://meridianltda.com',
+                'https://meridianltda.com',
+                'http://www.meridianltda.com',
+                'https://www.meridianltda.com',
                 'http://localhost',
                 'http://localhost:3000',
             ];

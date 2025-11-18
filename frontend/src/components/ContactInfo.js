@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { encodeId } from '../utils/encodeId';
+import { getApiBaseUrl } from '../config/api';
 
 import celImage from '../assets/img/cel.png';
 import buildingImage from '../assets/img/portaford.png';
@@ -164,7 +165,7 @@ END:VCARD
     
     const fetchContactData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
+        const apiUrl = getApiBaseUrl();
         const response = await fetch(`${apiUrl}/employees/${userId}`);
         if (!response.ok) {
           if (response.status === 429) {

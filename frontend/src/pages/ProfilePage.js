@@ -5,6 +5,7 @@ import ContactInfo from '../components/ContactInfo';
 import SocialMedia from '../components/SocialMedia';
 import DownloadVCard from '../components/DownloadVCard';
 import { decodeId } from '../utils/encodeId';
+import { getApiBaseUrl } from '../config/api';
 import '../assets/css/styles.css';
 
 const ProfilePage = () => {
@@ -55,8 +56,8 @@ const ProfilePage = () => {
 
     const fetchUserData = async () => {
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
         // Se elimina el header para la solicitud GET
+        const apiUrl = getApiBaseUrl();
         const response = await fetch(`${apiUrl}/employees/${id}`);
         if (!response.ok) {
           if (response.status === 429) {

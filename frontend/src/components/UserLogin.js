@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { encodeId } from "../utils/encodeId";
+import { getApiBaseUrl } from "../config/api";
 import logoImage from "../assets/img/Logo.png";
 import "../assets/css/userLogin.css";
 
@@ -40,7 +41,8 @@ const UserLogin = ({ onLogin }) => {
     setLoading(true);
 
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
+      // Usar la función directamente para obtener la URL actual
+      const apiUrl = getApiBaseUrl();
       const response = await fetch(`${apiUrl}/user/login`, {
         method: "POST",
         headers: {

@@ -3,6 +3,10 @@
 $allowedOrigins = [
     'http://carnet.meridian.com',
     'https://carnet.meridian.com',
+    'http://meridianltda.com',
+    'https://meridianltda.com',
+    'http://www.meridianltda.com',
+    'https://www.meridianltda.com',
     'http://localhost', // Para desarrollo local
     'http://localhost:3000', // Para desarrollo con React
 ];

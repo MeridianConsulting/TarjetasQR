@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getApiBaseUrl } from "../config/api";
 import "../assets/css/login.css";
 
 const Login = ({ onLogin }) => {
@@ -18,7 +19,7 @@ const Login = ({ onLogin }) => {
     setError("");
 
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
+      const apiUrl = getApiBaseUrl();
       const response = await fetch(`${apiUrl}/admin/login`,{
           method: "POST",
           headers: {

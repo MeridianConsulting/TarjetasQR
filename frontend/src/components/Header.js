@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import { getApiBaseUrl } from "../config/api";
 import logoImage from "../assets/img/Logo.png";
 import emailImage from "../assets/img/email.png";
 import celImage2 from "../assets/img/cel2.png";
@@ -7,10 +8,9 @@ import profileDefault from "../assets/img/profile.png";
 
 // Función para obtener la imagen del perfil desde el backend o usar imagen por defecto
 function getProfileImageUrl(userId) {
-  const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
   // Intentamos cargar la imagen desde el backend
   // Si no existe, el backend debería manejar el error o podemos usar una imagen por defecto
-  return `${apiUrl}/uploads/${userId}.jpg`;
+  return `${getApiBaseUrl()}/uploads/${userId}.jpg`;
 }
 
 const Header = ({ userId }) => {
@@ -32,7 +32,7 @@ const Header = ({ userId }) => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
+        const apiUrl = getApiBaseUrl();
         const response = await fetch(`${apiUrl}/employees/${userId}`);
         if (!response.ok) {
           if (response.status === 429) {

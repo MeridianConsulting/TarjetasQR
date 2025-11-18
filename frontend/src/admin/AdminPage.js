@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiBaseUrl } from '../config/api';
 import '../assets/css/admin.css';
 
 // Componente para gestionar la URL de la imagen de perfil (actualización y eliminación)
@@ -103,10 +104,9 @@ const AdminPage = ({ onLogout }) => {
   });
   const [searchTerm, setSearchTerm] = useState('');
 
-  const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost/TarjetasQR/backend';
-
   const fetchEmpleados = async () => {
     try {
+      const apiUrl = getApiBaseUrl();
       const response = await fetch(`${apiUrl}/admin/employees`);
       if (!response.ok) {
         throw new Error('Error al obtener empleados');
@@ -135,6 +135,7 @@ const AdminPage = ({ onLogout }) => {
   const handleCreateEmpleado = async (e) => {
     e.preventDefault();
     try {
+      const apiUrl = getApiBaseUrl();
       const response = await fetch(`${apiUrl}/employees`, {
         method: 'POST',
         headers: {
@@ -169,6 +170,7 @@ const AdminPage = ({ onLogout }) => {
 
   const handleDeleteEmpleado = async (id) => {
     try {
+      const apiUrl = getApiBaseUrl();
       const response = await fetch(`${apiUrl}/admin/employees/${id}`, {
         method: 'DELETE',
       });
@@ -188,6 +190,7 @@ const AdminPage = ({ onLogout }) => {
 
   const handleUpdateEmpleado = async () => {
     try {
+      const apiUrl = getApiBaseUrl();
       const response = await fetch(`${apiUrl}/admin/employees/${editEmpleado.Id}`, {
         method: 'PUT',
         headers: {
@@ -310,7 +313,7 @@ const AdminPage = ({ onLogout }) => {
             {/* Componente para gestionar la URL de la imagen */}
             <ProfileImageManager
               userId={editEmpleado.Id}
-              apiUrl={apiUrl}
+              apiUrl={getApiBaseUrl()}
               currentImageUrl={editEmpleado.imageUrl}
               onUrlUpdate={handleImageUpdate}
             />
