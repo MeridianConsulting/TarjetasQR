@@ -14,20 +14,49 @@ class AdminController {
             return;
         }
         try {
-            $stmt = $this->db->prepare("SELECT id, password FROM admins WHERE username = ? AND password = ?");
-            $stmt->bind_param("ss", $data['username'], $data['password']);
+            // Buscar el usuario por username solamente
+            $stmt = $this->db->prepare("SELECT id, password FROM admins WHERE username = ?");
+            $stmt->bind_param("s", $data['username']);
             $stmt->execute();
             $result = $stmt->get_result();
+            
             if ($result->num_rows === 0) {
+                // Simular tiempo de procesamiento para evitar timing attacks
+                usleep(500000); // 0.5 segundos
                 http_response_code(401);
                 echo json_encode(["success" => false, "message" => "Credenciales incorrectas."]);
+                $stmt->close();
                 return;
             }
-            http_response_code(200);
-            echo json_encode(["success" => true, "message" => "Login exitoso."]);
+            
+            $admin = $result->fetch_assoc();
+            $stmt->close();
+            
+            // Verificar la contraseña usando password_verify
+            // Si la contraseña en BD no es un hash (migración), comparar directamente y actualizar
+            $passwordValid = false;
+            if (password_verify($data['password'], $admin['password'])) {
+                $passwordValid = true;
+            } elseif ($admin['password'] === $data['password']) {
+                // Compatibilidad: si la contraseña está en texto plano, actualizarla a hash
+                $passwordValid = true;
+                $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+                $updateStmt = $this->db->prepare("UPDATE admins SET password = ? WHERE id = ?");
+                $updateStmt->bind_param("si", $hashedPassword, $admin['id']);
+                $updateStmt->execute();
+                $updateStmt->close();
+            }
+            
+            if ($passwordValid) {
+                http_response_code(200);
+                echo json_encode(["success" => true, "message" => "Login exitoso."]);
+            } else {
+                http_response_code(401);
+                echo json_encode(["success" => false, "message" => "Credenciales incorrectas."]);
+            }
         } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(["success" => false, "message" => $e->getMessage()]);
+            echo json_encode(["success" => false, "message" => "Error en el servidor."]);
         }
     }
     

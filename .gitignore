@@ -1,0 +1,33 @@
+# Archivos de configuración sensibles
+backend/config/db.php
+backend/config/db.local.php
+
+# Variables de entorno
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+backend/logs/
+backend/error_log
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Node modules (si se instalan en la raíz)
+node_modules/
+
+# Archivos de backup
+*.bak
+*.backup
+*_backup_*
+
+# Archivos temporales
+*.tmp
+*.temp
+

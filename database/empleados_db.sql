@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2025 a las 22:40:32
+-- Tiempo de generación: 18-11-2025 a las 15:31:20
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -40,7 +40,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'WILLIAM', 'WILLIAM2025*', '2024-12-27 21:13:33', '2025-01-10 20:42:59');
+(1, 'WILLIAM', '$2y$10$RaLyiacs2ySzvIKdF7SgC.cVc.S95KTpweN1PaBWrBcU87vo9NzRG', '2024-12-27 21:13:33', '2025-11-18 14:29:01');
 
 -- --------------------------------------------------------
 
@@ -250,6 +250,7 @@ INSERT INTO `empleados` (`Id`, `nombre`, `cargo`, `numero_telefonico`, `email`, 
 (1151954545, 'JUAN MATEO CORDOBA WAGNER', 'Profesional senior', '3138174050', 'juanmateo.cordoba@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL),
 (1152210959, 'CARLOS JOSE URZOLA EBRATT', 'Profesional básico', '3182840175', 'carlos.urzola@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL);
 
+--
 -- Índices para tablas volcadas
 --
 

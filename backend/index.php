@@ -3,11 +3,37 @@ require_once __DIR__ . '/controllers/adminController.php';
 require_once __DIR__ . '/controllers/userController.php';
 require_once __DIR__ . '/middleware/cors.php';
 
-error_reporting(E_ALL);
+// Configuración de errores para producción
+// Solo reportar errores críticos, no mostrar detalles
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/logs/php_errors.log');
 
-// Base path
-define('BASE_PATH', '/TarjetasQR/backend');
+// Base path - detectar dinámicamente
+// Obtener el directorio del script actual relativo al DocumentRoot
+$scriptPath = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+$documentRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+$currentDir = str_replace('\\', '/', __DIR__);
+
+// Calcular el BASE_PATH relativo al DocumentRoot
+$relativePath = str_replace($documentRoot, '', $currentDir);
+$relativePath = str_replace('\\', '/', $relativePath);
+
+// Si no se puede calcular, usar el SCRIPT_NAME como fallback
+if (empty($relativePath) || $relativePath === $currentDir) {
+    $relativePath = dirname($_SERVER['SCRIPT_NAME']);
+}
+
+// Asegurar que comience con /
+if (substr($relativePath, 0, 1) !== '/') {
+    $relativePath = '/' . $relativePath;
+}
+
+// Eliminar barra final si existe
+$relativePath = rtrim($relativePath, '/');
+
+define('BASE_PATH', $relativePath);
 
 // Captura el método y la ruta de la solicitud
 $method = $_SERVER['REQUEST_METHOD'];
@@ -39,8 +65,17 @@ function handleRequest($method, $path) {
             
             $mimeType = $mimeTypes[strtolower($extension)] ?? 'application/octet-stream';
             
-            // Headers CORS para las imágenes
-            header('Access-Control-Allow-Origin: *');
+            // Headers CORS para las imágenes - restringir a dominios permitidos
+            $allowedOrigins = [
+                'http://carnet.meridian.com',
+                'https://carnet.meridian.com',
+                'http://localhost',
+                'http://localhost:3000',
+            ];
+            $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+            if (in_array($origin, $allowedOrigins)) {
+                header('Access-Control-Allow-Origin: ' . $origin);
+            }
             header('Access-Control-Allow-Methods: GET');
             header('Access-Control-Allow-Headers: Content-Type');
             header('Content-Type: ' . $mimeType);
