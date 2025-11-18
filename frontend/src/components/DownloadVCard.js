@@ -22,16 +22,27 @@ const DownloadVCard = ({ showButtonOnly, showQRCodeOnly, userName }) => {
     generateQRCode();
   }, []);
 
-  const downloadQRCode = () => {
-    if (qrCodeUrl) {
+  const downloadQRCode = async () => {
+    try {
+      // Generar un nuevo QR con colores negro y blanco solo para descarga
+      const url = window.location.href;
+      const qrCodeDataUrl = await QRCode.toDataURL(url, {
+        color: {
+          dark: '#000000',  // Negro para los módulos del QR
+          light: '#FFFFFF'  // Blanco para el fondo
+        }
+      });
+      
       const link = document.createElement('a');
-      link.href = qrCodeUrl;
+      link.href = qrCodeDataUrl;
       // Generar nombre del archivo
       const formattedName = userName 
         ? `${userName.toUpperCase().replace(/ /g, '_')}_QR.jpg`
         : 'qrcode.jpg';
       link.download = formattedName;
       link.click();
+    } catch (error) {
+      console.error('Error al generar QR para descarga:', error);
     }
   };
 
