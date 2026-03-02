@@ -2,8 +2,12 @@
 class Database {
     private $host = "localhost";
     private $db_name = "empleados_db";
-    private $username = "empleados_db";
-    private $password = "eTl!Y@AV-,_E";
+    // Despliegue (producción)
+    // private $username = "empleados_db";
+    // private $password = "eTl!Y@AV-,_E";
+    // Local (phpMyAdmin por defecto: root sin contraseña)
+    private $username = "root";
+    private $password = "";
     public $conn;
 
     public function getConnection() {

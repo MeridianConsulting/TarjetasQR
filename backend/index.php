@@ -1,7 +1,9 @@
 <?php
+// CORS primero, para que las preflight OPTIONS siempre tengan los headers
+require_once __DIR__ . '/middleware/cors.php';
+
 require_once __DIR__ . '/controllers/adminController.php';
 require_once __DIR__ . '/controllers/userController.php';
-require_once __DIR__ . '/middleware/cors.php';
 
 // Configuración de errores para producción
 // Solo reportar errores críticos, no mostrar detalles

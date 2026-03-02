@@ -41,7 +41,6 @@ const UserLogin = ({ onLogin }) => {
     setLoading(true);
 
     try {
-      // Usar la función directamente para obtener la URL actual
       const apiUrl = getApiBaseUrl();
       const response = await fetch(`${apiUrl}/user/login`, {
         method: "POST",
@@ -51,16 +50,27 @@ const UserLogin = ({ onLogin }) => {
         body: JSON.stringify({ cedula, password }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (_) {
+        setError(`El servidor respondió con error (${response.status}). Compruebe que Apache y el backend estén activos.`);
+        onLogin(false);
+        return;
+      }
+
+      if (!response.ok) {
+        setError(data.message || `Error del servidor (${response.status}).`);
+        onLogin(false);
+        return;
+      }
 
       if (data.success) {
-        // Guardar token de sesión (opcional, para futuras funcionalidades)
         if (data.token) {
           localStorage.setItem('userToken', data.token);
           localStorage.setItem('userCedula', data.cedula);
         }
         onLogin(true);
-        // Redirigir a la página del perfil del usuario usando el ID codificado
         const encodedId = data.encodedId || encodeId(cedula);
         navigate(`/ProfilePage/${encodedId}`);
       } else {
@@ -68,7 +78,8 @@ const UserLogin = ({ onLogin }) => {
         onLogin(false);
       }
     } catch (err) {
-      setError("No se pudo conectar con el servidor. Verifique su conexión.");
+      console.error("Error en login:", err);
+      setError("No se pudo conectar con el servidor. Verifique que Apache esté encendido y la URL del backend sea correcta.");
       onLogin(false);
     } finally {
       setLoading(false);

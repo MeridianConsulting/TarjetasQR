@@ -5,11 +5,13 @@
   RewriteEngine On
   RewriteBase /
   
-  # Si la solicitud es para /backend, redirigir al backend sin /backend en la ruta
+  # Backend cuando la app está en subdirectorio (ej. /TarjetasQR/backend en local)
+  RewriteCond %{REQUEST_URI} ^/TarjetasQR/backend(/|$) [NC]
+  RewriteRule ^backend(/.*)?$ TarjetasQR/backend/index.php [QSA,L]
+  
+  # Backend cuando la app está en la raíz (ej. producción en /backend)
   RewriteCond %{REQUEST_URI} ^/backend/(.*)$
   RewriteRule ^backend/(.*)$ backend/index.php [QSA,L]
-  
-  # Si la solicitud es exactamente /backend, redirigir también
   RewriteCond %{REQUEST_URI} ^/backend$
   RewriteRule ^backend$ backend/index.php [QSA,L]
   

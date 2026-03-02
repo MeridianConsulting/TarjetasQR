@@ -20,16 +20,28 @@ const Login = ({ onLogin }) => {
 
     try {
       const apiUrl = getApiBaseUrl();
-      const response = await fetch(`${apiUrl}/admin/login`,{
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (_) {
+        setError(`El servidor respondió con error (${response.status}). Compruebe que Apache y el backend estén activos.`);
+        onLogin(false);
+        return;
+      }
+
+      if (!response.ok) {
+        setError(data.message || `Error del servidor (${response.status}).`);
+        onLogin(false);
+        return;
+      }
 
       if (data.success) {
         onLogin(true);
@@ -40,7 +52,7 @@ const Login = ({ onLogin }) => {
       }
     } catch (err) {
       console.error("Error al iniciar sesión:", err);
-      setError("No se pudo conectar con el servidor. Verifique su conexión.");
+      setError("No se pudo conectar con el servidor. Verifique que Apache esté encendido y la URL del backend sea correcta.");
       onLogin(false);
     }
   };
