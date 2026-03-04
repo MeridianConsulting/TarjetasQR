@@ -79,6 +79,8 @@ const ContactInfo = ({ userId }) => {
     nombre: '',
     email: '',
     numero_telefonico: '',
+    tipo_sangre: '',
+    arl: '',
   });
   const [telefonoInternacional, setTelefonoInternacional] = useState('');
   const [loading, setLoading] = useState(true);
@@ -179,6 +181,8 @@ END:VCARD
             nombre: data.nombre || '',
             email: data.email || '',
             numero_telefonico: data.numero_telefonico || '',
+            tipo_sangre: data.tipo_sangre || '',
+            arl: data.arl || '',
           });
         } else {
           throw new Error('Datos incompletos del empleado');
@@ -286,6 +290,32 @@ END:VCARD
             <p>
               <img src={emailImage2} alt="Email" className="contact-icon" />
               <span>{contactData.email}</span>
+            </p>
+          </div>
+        )}
+
+        {/* Tipo de sangre */}
+        {contactData.tipo_sangre && (
+          <div
+            className="contact-item clickable"
+            onClick={() => copyToClipboard(contactData.tipo_sangre, 'Tipo de sangre')}
+          >
+            <p>
+              <img src={locationImage} alt="Tipo de sangre" className="contact-icon" />
+              <span><strong>Tipo de sangre:</strong> {contactData.tipo_sangre}</span>
+            </p>
+          </div>
+        )}
+
+        {/* ARL */}
+        {contactData.arl && (
+          <div
+            className="contact-item clickable"
+            onClick={() => copyToClipboard(contactData.arl, 'ARL')}
+          >
+            <p>
+              <img src={buildingImage} alt="ARL" className="contact-icon" />
+              <span><strong>ARL:</strong> {contactData.arl}</span>
             </p>
           </div>
         )}
