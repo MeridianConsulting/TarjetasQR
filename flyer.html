@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructivo de Usuario - Tarjetas QR Meridian Consulting Ltda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:    #33619D;
+            --blue-dk: #1e3f6f;
+            --blue-lt: #4a7fbf;
+            --cyan:    #63C9DB;
+            --yellow:  #f8cf3b;
+            --ink:     #0c1624;
+            --white:   #ffffff;
+            --snow:    #f5f8fc;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #dce6f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+
+        /* ── CARD ──────────────────────────────────────────── */
+        .card {
+            width: 100%;
+            max-width: 760px;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 24px 80px rgba(30,63,111,.22), 0 4px 16px rgba(0,0,0,.08);
+            animation: rise .6s cubic-bezier(.22,1,.36,1) both;
+        }
+        @keyframes rise {
+            from { opacity:0; transform: translateY(28px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        /* ── HEADER ─────────────────────────────────────────── */
+        .header {
+            background: linear-gradient(135deg, var(--blue-dk) 0%, var(--blue) 60%, var(--blue-lt) 100%);
+            padding: 48px 40px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99,201,219,.18) 0%, transparent 70%);
+            top: -120px; right: -100px;
+            pointer-events: none;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 18px,
+                rgba(255,255,255,.025) 18px,
+                rgba(255,255,255,.025) 19px
+            );
+            pointer-events: none;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--yellow);
+            color: var(--ink);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 18px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(26px, 5vw, 38px);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.15;
+            max-width: 520px;
+            position: relative;
+            z-index: 1;
+        }
+        .header h1 em {
+            font-style: normal;
+            color: var(--cyan);
+        }
+
+        .header-sub {
+            margin-top: 10px;
+            color: rgba(255,255,255,.65);
+            font-size: 15px;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── DIVIDER ─────────────────────────────────────────── */
+        .stripe {
+            height: 5px;
+            background: linear-gradient(90deg, var(--yellow) 0%, var(--cyan) 50%, var(--blue-lt) 100%);
+        }
+
+        /* ── BODY ────────────────────────────────────────────── */
+        .body {
+            padding: 40px;
+        }
+
+        .intro {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #3a4a60;
+            max-width: 620px;
+            margin-bottom: 36px;
+            border-left: 3px solid var(--cyan);
+            padding-left: 16px;
+        }
+
+        /* ── STEP 1 BOX ─────────────────────────────────────── */
+        .access-box {
+            background: var(--snow);
+            border: 1.5px solid #d0dff0;
+            border-radius: 14px;
+            padding: 28px 30px;
+            margin-bottom: 36px;
+            position: relative;
+        }
+        .step-badge {
+            position: absolute;
+            top: -14px; left: 24px;
+            background: var(--blue);
+            color: var(--white);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+        .access-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--blue-dk);
+            margin-bottom: 14px;
+        }
+        .url-chip {
+            display: inline-block;
+            background: var(--blue-dk);
+            color: var(--cyan);
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            word-break: break-all;
+        }
+        .nav-path {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #4a6080;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+        .nav-path strong {
+            background: rgba(99,201,219,.18);
+            color: var(--blue-dk);
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .nav-path .arrow { color: var(--cyan); font-size: 16px; }
+
+        .creds {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .cred-item {
+            background: var(--white);
+            border: 1px solid #d0dff0;
+            border-radius: 8px;
+            padding: 10px 18px;
+            flex: 1;
+            min-width: 150px;
+        }
+        .cred-item .label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #7a9ab8;
+            margin-bottom: 4px;
+        }
+        .cred-item .value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--blue-dk);
+        }
+
+        /* ── CARDS GRID ─────────────────────────────────────── */
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 14px;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+        @media (max-width: 540px) {
+            .cards-grid { grid-template-columns: 1fr; }
+            .body { padding: 28px 20px; }
+            .header { padding: 36px 24px 30px; }
+            .access-box { padding: 24px 20px; }
+        }
+
+        .feat-card {
+            background: var(--snow);
+            border: 1.5px solid #d0dff0;
+            border-radius: 12px;
+            padding: 22px 20px;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .feat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(51,97,157,.12);
+        }
+        .feat-card .icon-wrap {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-lt) 100%);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 14px;
+            font-size: 20px;
+        }
+        .feat-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--blue-dk);
+            margin-bottom: 8px;
+        }
+        .feat-card p {
+            font-size: 13px;
+            color: #5a6e88;
+            line-height: 1.55;
+        }
+
+        /* ── QR SECTION ─────────────────────────────────────── */
+        .qr-section {
+            background: linear-gradient(120deg, var(--blue-dk) 0%, #254a7c 100%);
+            border-radius: 14px;
+            padding: 28px 30px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 36px;
+        }
+        .qr-icon {
+            width: 72px; height: 72px;
+            background: rgba(255,255,255,.1);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+        .qr-text { flex: 1; min-width: 200px; }
+        .qr-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        .qr-text p {
+            font-size: 13.5px;
+            color: rgba(255,255,255,.65);
+            line-height: 1.6;
+        }
+        .qr-tips { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .qr-tip {
+            display: flex; align-items: flex-start; gap: 8px;
+            font-size: 13px;
+            color: rgba(255,255,255,.8);
+        }
+        .qr-tip::before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            background: var(--yellow);
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        /* ── FOOTER ─────────────────────────────────────────── */
+        .footer {
+            background: var(--ink);
+            padding: 22px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .footer-msg {
+            font-size: 13px;
+            color: rgba(255,255,255,.55);
+            line-height: 1.5;
+        }
+        .footer-msg strong { color: var(--cyan); font-weight: 500; }
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: .04em;
+        }
+        .footer-logo span { color: var(--yellow); }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="tag">📋 Guía Rápida</div>
+        <h1>Carnets Virtuales <em>& Tarjetas QR</em></h1>
+        <p class="header-sub">Instructivo de usuario · Meridian Consulting Ltda.</p>
+    </div>
+
+    <div class="stripe"></div>
+
+    <!-- BODY -->
+    <div class="body">
+
+        <p class="intro">
+            Este sistema de tarjetas digitales facilita el acceso y la difusión de tu información de contacto. Al escanear tu código QR, cualquier persona podrá visualizar tu carnet virtual al instante.
+        </p>
+
+        <!-- STEP 1 -->
+        <div class="access-box">
+            <div class="step-badge">Paso 1 · Acceso</div>
+            <h3 style="margin-top:8px;">Inicia sesión en la plataforma</h3>
+            <div class="url-chip">https://www.meridianltda.com</div>
+            <div class="nav-path">
+                Navega a
+                <strong>Otros Servicios</strong>
+                <span class="arrow">→</span>
+                <strong>Carnets virtuales</strong>
+            </div>
+            <div class="creds">
+                <div class="cred-item">
+                    <div class="label">Usuario</div>
+                    <div class="value">Número de cédula</div>
+                </div>
+                <div class="cred-item">
+                    <div class="label">Contraseña</div>
+                    <div class="value">Número de cédula</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURES -->
+        <div class="section-label">Funcionalidades del carnet</div>
+        <div class="cards-grid">
+            <div class="feat-card">
+                <div class="icon-wrap">📞</div>
+                <h4>Acciones Rápidas</h4>
+                <p>Los botones superiores permiten realizar una llamada o redactar un correo con un solo toque.</p>
+            </div>
+            <div class="feat-card">
+                <div class="icon-wrap">📋</div>
+                <h4>Copiar Datos</h4>
+                <p>Toca cualquier campo para copiar el texto directamente en tu portapapeles y pegarlo donde necesites.</p>
+            </div>
+            <div class="feat-card">
+                <div class="icon-wrap">👤</div>
+                <h4>Guardar Contacto</h4>
+                <p>Pulsa sobre el número de teléfono y confirma para agregar todos los datos a tu lista de contactos.</p>
+            </div>
+            <div class="feat-card">
+                <div class="icon-wrap">💾</div>
+                <h4>Descarga Instantánea</h4>
+                <p>Usa <strong>"Guardar en contactos"</strong> para que la información quede disponible de inmediato en tu móvil.</p>
+            </div>
+        </div>
+
+        <!-- QR -->
+        <div class="qr-section">
+            <div class="qr-icon">⬛</div>
+            <div class="qr-text">
+                <h3>Comparte tu Código QR</h3>
+                <p>Cada tarjeta tiene un QR único. Cualquier persona que lo escanee verá tu perfil completo.</p>
+                <div class="qr-tips">
+                    <div class="qr-tip">Usa <strong style="color:#fff;">"Descargar QR"</strong> para guardar la imagen en tu dispositivo.</div>
+                    <div class="qr-tip">Incrústalo en tu firma de correo, currículum o presentaciones corporativas.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-msg">
+            ¿Problemas técnicos? Contacta a <strong>IT</strong>.<br>
+            ¿Actualización de datos? Dirígete a <strong>Gestión Humana</strong>.
+        </div>
+        <div class="footer-logo">Meridian Consulting LTDA<span>.</span></div>
+    </div>
+
+</div>
+
+</body>
+</html>
