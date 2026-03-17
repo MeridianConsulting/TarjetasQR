@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 05-03-2026 a las 16:25:57
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Servidor: localhost:3306
+-- Tiempo de generación: 17-03-2026 a las 12:10:46
+-- Versión del servidor: 10.6.24-MariaDB-cll-lve
+-- Versión de PHP: 8.3.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,9 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'WILLIAM', '$2y$10$RaLyiacs2ySzvIKdF7SgC.cVc.S95KTpweN1PaBWrBcU87vo9NzRG', '2024-12-27 21:13:33', '2025-11-18 14:29:01');
+(1, 'WILLIAM', '$2y$10$RaLyiacs2ySzvIKdF7SgC.cVc.S95KTpweN1PaBWrBcU87vo9NzRG', '2024-12-27 21:13:33', '2025-11-18 14:29:01'),
+(3, 'MATEO', 'MATEO123*', '2025-11-18 15:45:14', '2025-11-18 15:45:14'),
+(5, 'MATEO123', '$2y$10$UTfGPfzuBiHsTb/pmEj7ceUdKWfrGVEgQRPWTKwc.MueGjx5luaNW', '2025-11-18 15:45:28', '2025-11-18 15:45:37');
 
 -- --------------------------------------------------------
 
@@ -106,22 +108,22 @@ INSERT INTO `empleados` (`Id`, `nombre`, `cargo`, `numero_telefonico`, `email`, 
 (63536247, 'JULLY MARCELA ORTEGON BARRERA', 'Profesional senior', '3138174050', 'jully.ortegon@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (63540751, 'ADRIANA PATRICIA DUEÑES GARCÉS', 'Profesional especialista', '3138174050', 'adriana.duenes@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (73188189, 'CARLOS ANTONIO FONTALVO CARRASCAL', 'Supervisor Integral En Intervenciones A Pozo Tipo III', '3138174050', 'carlosfontalvocarrascal@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(74083945, 'CAMILO ALBERTO PEREZ RUIZ', 'Company Man', '3208495340', 'camiloperezruiz@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1fTT4dyTEtaEewXu9e7RZFYegIDAtU5OF/view?usp=sharing', 'O+', 'Colmena'),
+(74083945, 'CAMILO ALBERTO PEREZ RUIZ', 'Company Man', '3208495340', 'camiloperezruiz@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (75101511, 'JORGE EDUARDO PAIBA ALZATE', 'Profesional senior', '3155056633', 'jorge.paiba@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (79490148, 'CESAR AUGUSTO URREGO AVENDAÑO', 'Subgerente', '3138174050', 'currego@meridian.com.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (79613401, 'WILLIAM AUGUSTO FRANCO CASTELLANOS', 'Gerente general', '3138174050', 'wfranco@meridian.com.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (79686130, 'RICARDO GAVIRIA GARCIA', 'Profesional senior', '3138174050', 'ricardo.gaviria@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (79954907, 'RONALD VASQUEZ ZARATE', 'Analista de nomina y contratacion', '3138174050', 'nominas@meridian.com.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (80076686, 'ALEX JHOAN GONZALEZ MORA', 'Ingeniero de intervencion a pozos tipo ii', '3138174050', 'ing.alexgonzalez@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(80095582, 'ALBERTO VLADIMIR AMAYA ESPITIA', 'Company Man', '3142157622', 'albertovladimir@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/13ZYs0O-SiXlaEVKcwsj-Gqz1HsamFIUg/view?usp=sharing', 'O+', 'Colmena'),
+(80095582, 'ALBERTO VLADIMIR AMAYA ESPITIA', 'Company Man', '3142157622', 'albertovladimir@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (80100600, 'LUIS GUILLERMO MERCADO RICO', 'Supervisor integral en intervenciones a pozo tipo ii', '3138174050', 'luis.guillermo.mercado@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (80150738, 'WILBER CASTAÑEDA CASTAÑEDA', 'Servicio especializado en integridad de pozos tipo i', '3138174050', 'wilbercastaeda@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (80243783, 'DIEGO MAURICIO MARTINEZ BRAVO', 'Profesional senior', '3138174050', 'diego.martinez@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (80417936, 'RAFAEL ALBERTO GUATAME APONTE', '36', '3138174050', 'rguatame@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(80794172, 'DANIEL RAMIREZ SANCHEZ', 'Company Man', '3142421019', 'danielramirezsanchez@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1i_U4NieQehLFbupbQkKCi6Ed-SbBcM8i/view?usp=sharing', 'A+', 'Colmena'),
+(80794172, 'DANIEL RAMIREZ SANCHEZ', 'Company Man', '3142421019', 'danielramirezsanchez@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'A+', 'Colmena'),
 (80883010, 'OVEIMAR SANTAMARIA TORRES', 'Profesional senior', '3138174050', 'oveimar.santamaria@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (83042295, 'WILLIAM CABRERA CASTRO', 'Profesional senior', '3138174050', 'wcabrera@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(83168382, 'GILBERTO RUBIANO QUIROGA', 'Company Man', '3152946638', 'gilbertorubiano@yahoo.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1N7YjiN_RpAluYGZtQmSpVgwRo_ale-B4/view?usp=sharing', 'O+', 'Colmena'),
+(83168382, 'GILBERTO RUBIANO QUIROGA', 'Company Man', '3152946638', 'gilbertorubiano@yahoo.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (88278069, 'EDGARD MAURICIO ALVAREZ FRANCO', 'Servicio especializado en costos de intervencion de pozos tipo ii', '3162502207', 'GENIOALV@GMAIL.COM', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (88281896, 'JULIO CESAR ROMERO AREVALO', 'Supervisor Integral en Intervenciones a Pozo', '3138174050', 'julio.romero@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (91207387, 'FERNANDO LOPEZ PRADA', '49', '3138174050', 'ferlopra@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
@@ -157,13 +159,13 @@ INSERT INTO `empleados` (`Id`, `nombre`, `cargo`, `numero_telefonico`, `email`, 
 (1016037506, 'PAOLA ANDREA GOMEZ CABRERA', 'Profesional junior', '3138174050', 'paola.gomez@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1017211010, 'MARIA ALEJANDRA  GIRALDO MUÑOZ', 'Profesional senior', '3138174050', 'maria.giraldo@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1017222178, 'JUAN DAVID ROBLES PIRE', 'Asistente de Company Man', '3202818282', 'jdroblesp@unal.edu.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
-(1018408231, 'JONATHAN RAMIREZ ALVARADO', 'Company Man', '3176963137', 'Jonathan.Ramirez.Alvarado@outlook.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/134KCNf8cOhxbST4yr1ysmG54asrhqkYw/view?usp=sharing', 'O+', 'Colmena'),
+(1018408231, 'JONATHAN RAMIREZ ALVARADO', 'Company Man', '3176963137', 'Jonathan.Ramirez.Alvarado@outlook.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (1018411794, 'JENNYFER PAOLA SANCHEZ PINZON', 'Asistente contable', '3138174050', 'asistentecontable1@meridian.com.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1018516821, 'LUISA MARIA MELO RODRÍGUEZ', 'Auxiliar contable', '3138174050', 'luisamrdz22@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1019011177, 'LEIDY JOHANNA BELLO AREVALO', 'Profesional junior', '3142420913', 'leidy.bello@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(1019133012, 'DARIO ALEXANDER POMARE ORTEGA', 'Asistente de Company Man', '3128894731', 'juniorpomareo@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1sAF1QRC11pRMHEVN4FN5AfdstqzA4oSL/view?usp=sharing', 'O+', 'Colmena'),
+(1019133012, 'DARIO ALEXANDER POMARE ORTEGA', 'Asistente de Company Man', '3128894731', 'juniorpomareo@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (1019136436, 'LADY LORENA VINCHERY SOLANO', 'Aprendiz etapa practica', '3138174050', 'auxiliargh@meridian.com.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(1019152161, 'DIEGO ALEJANDRO ACUÑA QUINTERO', 'Asistente de Company Man', '3178958725', 'dacua8@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1SL9RbY_JIFdugXemFMJP8dFM9zWpetqa/view?usp=sharing', 'O+', 'Colmena'),
+(1019152161, 'DIEGO ALEJANDRO ACUÑA QUINTERO', 'Asistente de Company Man', '3178958725', 'dacua8@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (1020427784, 'JUAN SEBASTIAN VALENCIA ORTEGA', 'Servicio especializado en integridad de pozos tipo ii', '3138174050', 'Juanseb89@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1020733194, 'ELOY GABRIEL GOMEZ REYES', 'Profesional de Gestión Humana', '3138174050', 'profesionalgh@meridian.com.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1020792684, 'JORGE FELIPE ALARCON TORRES', 'Profesional junior', '3138174050', 'jorge.alarcon@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
@@ -201,7 +203,7 @@ INSERT INTO `empleados` (`Id`, `nombre`, `cargo`, `numero_telefonico`, `email`, 
 (1075234956, 'INGRID YISET SANCHEZ PEREZ', 'Servicio especializado en costos de intervencion de pozos tipo i', '3138174050', 'ingridyisedsanchez@outlook.es', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1075239408, 'LENIN CORDOBA RIVAS', '35', '3138174050', 'lening06@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1075248439, 'MARIA DEL PILAR GOMEZ MORA', 'Ingeniero(a) asistente de company man para operaciones de perforación completamiento y workover d1', '3138174050', 'mdpgomezm@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(1075250696, 'MARIA VICTORIA MEDINA ANDRADE', 'Company Man', '3187826413', 'vicomedina1212@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/14MN--tY_lW4CiX2cs4veyRAWlJCKsJDO/view?usp=sharing', 'O+', 'Colmena'),
+(1075250696, 'MARIA VICTORIA MEDINA ANDRADE', 'Company Man', '3187826413', 'vicomedina1212@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (1075263195, 'JESUS ERNESTO COQUECO VARGAS', 'Profesional senior', '3138174050', 'jesusccvargas@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1075276712, 'JULIAN DAVID NIETO ALVAREZ', 'Asistente de Company Man', '3157939923', 'juliandavn@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'B+', 'Colmena'),
 (1075284985, 'SEBASTIAN LLANOS GALLO', 'Profesional junior', '3203210974', 'sebastian.llanos@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
@@ -209,8 +211,8 @@ INSERT INTO `empleados` (`Id`, `nombre`, `cargo`, `numero_telefonico`, `email`, 
 (1075292422, 'OLMER ANDRES MORALES MORA', 'Profesional junior', '3138174050', 'andres.morales@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1075293846, 'DANIELA MOLINA LANDINEZ', 'Profesional junior', '3138174050', 'daniela.molina@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1077173073, 'ESTEBAN GARCIA ROJAS', 'Supervisor integral en intervenciones a pozo tipo ii', '3138174050', 'estebangr1987@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(1079181735, 'ALVARO ANDRES RIVERA OLARTE', 'Asistente de Company Man', '3208449808', 'albarxa@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1Kacx_b7T6guaMrI5VeHEDtovVuSSf80z/view?usp=sharing', 'A+', 'Colmena'),
-(1082898312, 'FLAVIA VANESSA PEREZ BARROS', 'Company Man', '3015001273', 'flavia.perezbarros@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1ruxKILQaJ8aK07h7fOK6lIkGd-JVgtwp/view?usp=sharing', 'O+', 'Colmena'),
+(1079181735, 'ALVARO ANDRES RIVERA OLARTE', 'Asistente de Company Man', '3208449808', 'albarxa@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'A+', 'Colmena'),
+(1082898312, 'FLAVIA VANESSA PEREZ BARROS', 'Company Man', '3015001273', 'flavia.perezbarros@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (1082981742, 'CHRISTIAN DAVID MENDOZA RAMIREZ', 'Profesional básico', '3138174050', 'christian.mendoza@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1087047704, 'YUBER RODRIGUEZ ARTURO', 'Profesional junior', '3138174050', 'yuber.rodriguez@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1089599089, 'JUAN ESTEBAN LOPEZ OSORIO', 'Aprendiz etapa lectiva', '3138174050', 'Juan12@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
@@ -230,18 +232,18 @@ INSERT INTO `empleados` (`Id`, `nombre`, `cargo`, `numero_telefonico`, `email`, 
 (1098692205, 'BRIGGITE SUSEC CAMACHO JEREZ', 'Profesional junior', '3186506670', 'briggite.camacho@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098697791, 'MARIA ALEJANDRA JOYA RINCON', 'Profesional senior', '3138174050', 'alejandra.joya@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098706838, 'JULIÁN ANDRÉS HERNÁNDEZ PINTO', 'Profesional junior', '3138174050', 'julian.hernandez@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(1098712563, 'WILMAN ENRIQUE ALVAREZ QUIROZ', 'Asistente de Company Man', '3013715669', 'wilman.alvarez1@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/15cqbdq562ws2Zx8hhJkajq9J1IjQ2TmW/view?usp=sharing', 'O+', 'Colmena'),
+(1098712563, 'WILMAN ENRIQUE ALVAREZ QUIROZ', 'Asistente de Company Man', '3013715669', 'wilman.alvarez1@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (1098725794, 'JOSE GABRIEL NASSAR DIAZ', 'Profesional junior', '3166233088', 'jose.nassar@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098726424, 'EMMANUEL ROBLES ALBARRACIN', 'Profesional junior', '3138174050', 'emmanuel.robles@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098727333, 'PERLA MELISSA PINZÓN AGUDELO', 'Ingeniero de intervencion a pozos tipo iii', '3138174050', 'perlameli_92@hotmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(1098728440, 'OVIDIO ANDREZ GOMEZ RODRIGUEZ', 'Company Man', '3176801825', 'ovidioandresgomez@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', 'https://drive.google.com/file/d/1L0jU91D58nD84rsyXw9Vj38uJOu_1Eji/view?usp=sharing', 'O+', 'Colmena'),
+(1098728440, 'OVIDIO ANDREZ GOMEZ RODRIGUEZ', 'Company Man', '3176801825', 'ovidioandresgomez@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1)7136231113', NULL, 'O+', 'Colmena'),
 (1098733967, 'OSCAR FABIAN SUAREZ SUAREZ', 'Profesional senior', '3138174050', 'oscar.suarez@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098739269, 'GUSTAVO ADOLFO MORENO BELTRAN', 'Profesional junior', '3144386777', 'gustavo.moreno@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098745210, 'ESTEFANY LIZETH VELANDIA JAIMES', 'Profesional junior', '3138174050', 'gestefanyvelandia@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098755426, 'JAIME JOSÉ MARTÍNEZ VERTEL', 'Profesional junior', '3102376098', 'jaime.martinez@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098758681, 'MILTON JULIAN GUALTEROS QUIROGA', 'Profesional senior', '3002755299', 'milton.gualteros@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098761186, 'ALEXANDRA KATHERINE LONDOÑO CAMACHO', 'Profesional junior', '3138174050', 'alexandra.londoño@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
-(1098774228, 'ANGELICA MARIA GONZALEZ SANCHEZ', '26', '3014187370', 'ing.gonzalez.angelica@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
+(1098774228, 'ANGELICA MARIA GONZALEZ SANCHEZ', 'Asistente de Company Man', '3014187370', 'ing.gonzalez.angelica@gmail.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, 'O+', 'Colmena'),
 (1098782789, 'JUAN SEBASTIAN AVILA PARRA', 'Profesional junior', '3105854019', 'juan.avila@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1098800508, 'CLAUDIA ALEJANDRA  CAJICÁ TRILLOS', 'Profesional básico', '3138174050', 'claudia.cajica@meridianecp.com', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
 (1100950373, 'LADY MILENA LOPEZ ROJAS', 'Profesional junior', '3112450500', 'lady.lopez@meridian.com.co', 'MERIDIAN CONSULTING LTDA', '3138174050', '(1) 713 623 1113', NULL, NULL, NULL),
@@ -294,7 +296,7 @@ ALTER TABLE `empleados`
 -- AUTO_INCREMENT de la tabla `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
